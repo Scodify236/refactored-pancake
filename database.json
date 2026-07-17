@@ -91,50 +91,7 @@
       ]
     }
   ],
-  "payouts": [
-    {
-      "id": 1,
-      "submission_date": "2026-05-08T00:00:00.000Z",
-      "payout_date": "2026-05-15T00:00:00.000Z",
-      "amount": "N/A",
-      "card_type": "All Cards",
-      "method": "Any",
-      "status": "Submission Closed"
-    },
-    {
-      "id": 2,
-      "submission_date": "2026-05-16T00:00:00.000Z",
-      "payout_date": "2026-05-23T00:00:00.000Z",
-      "amount": "N/A",
-      "card_type": "All Cards",
-      "method": "Any",
-      "status": "Submission Closed"
-    },
-    {
-      "id": 3,
-      "submission_date": "2026-06-08T00:00:00.000Z",
-      "payout_date": "2026-06-15T00:00:00.000Z",
-      "amount": "N/A",
-      "card_type": "All Cards",
-      "method": "Any",
-      "status": "Submission Open"
-    }
-  ],
-  "reviews": [
-    {
-      "id": 1,
-      "name": "Aarav Sharma",
-      "role": "Casual Gamer",
-      "avatar_url": "",
-      "quote": "Had a ₹5,000 Amazon card sitting around from my birthday. Swapped it for UPI cash easily. The transaction felt extremely transparent.",
-      "rating": 5,
-      "trade_type": "Amazon ➔ UPI",
-      "proof_image_url": "https://i.ibb.co/4DcNDpt/x.png",
-      "region": "US",
-      "gc_received_date": "2026-06-04T16:47:59.165Z",
-      "payment_sent_date": "2026-06-09T16:47:59.166Z",
-      "created_at": "2026-06-09T16:47:59.166Z"
-    }
-  ],
+  "payouts": [],
+  "reviews": [],
   "appeals": []
 }
