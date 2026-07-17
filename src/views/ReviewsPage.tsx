@@ -71,9 +71,9 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
     <div className="relative rounded-[1.5rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col gap-3.5 hover:border-primary/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden group h-full">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-      {/* 1. Full Image (Viewport/card container controlled height) */}
+      {/* 1. Full Image (Viewport/card container controlled height responsive) */}
       {urls.length > 0 && (
-        <div className="relative w-full h-[320px] rounded-xl overflow-hidden border border-border bg-black/30">
+        <div className="relative w-full h-[200px] sm:h-[320px] rounded-xl overflow-hidden border border-border bg-black/30">
           <button
             type="button"
             onClick={() => onZoom(urls, activeIdx)}
@@ -168,11 +168,11 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
 
   return (
     <div className="relative rounded-[1.25rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col gap-4 hover:border-primary/35 transition-all duration-300 group">
-      {/* 1. Multiple Images Horizontally (Viewport / Container height controlled to h-[360px]) */}
+      {/* 1. Multiple Images Horizontally (Viewport / Container height responsive) */}
       {urls.length > 0 && (
         <div className="flex gap-4 overflow-x-auto py-2 scrollbar-thin scrollbar-thumb-border">
           {urls.map((url, idx) => (
-            <div key={idx} className="relative h-[360px] min-w-[280px] sm:min-w-[480px] rounded-xl overflow-hidden border border-border bg-black/30 shrink-0">
+            <div key={idx} className="relative h-[220px] sm:h-[360px] min-w-[220px] sm:min-w-[480px] rounded-xl overflow-hidden border border-border bg-black/30 shrink-0">
               <button
                 type="button"
                 onClick={() => onZoom(urls, idx)}
