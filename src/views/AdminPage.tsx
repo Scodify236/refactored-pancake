@@ -2179,7 +2179,7 @@ export function AdminPage() {
                                         setEditingReviewTradeType(review.trade_type)
                                         setEditingReviewRating(review.rating)
                                         setEditingReviewQuote(review.quote)
-                                        setEditingReviewProofUrl(review.proof_image_url)
+                                        setEditingReviewProofUrls(review.proof_image_url ? review.proof_image_url.split("|||").map((u: string) => u.trim()).filter(Boolean) : [])
                                         setEditingReviewRegion(review.region || "")
                                         const parsedCard = review.trade_type.split(" ")[0] || "Amazon"
                                         setEditingReviewCardType(parsedCard)
@@ -2205,31 +2205,48 @@ export function AdminPage() {
                               </div>
 
                               <div>
-                                {review.proof_image_url && (
-                                  <div className="mb-5">
-                                    <p className="text-[8px] font-bold font-mono uppercase tracking-wider text-muted-foreground mb-2">Verification Certificate</p>
-                                    <button
-                                      onClick={() => setZoomedImgUrl(review.proof_image_url)}
-                                      className="flex items-center gap-3 p-2.5 rounded-xl bg-foreground/[0.015] border border-border/60 hover:border-primary/50 hover:bg-foreground/[0.03] transition-all duration-300 group cursor-pointer w-full text-left bg-transparent"
-                                    >
-                                      <div className="relative h-20 w-20 shrink-0 rounded-lg overflow-hidden border border-border group-hover:border-primary/30 transition bg-black/40">
-                                        <img src={review.proof_image_url} alt="Proof Thumbnail" className="h-full w-full object-cover group-hover:scale-105 transition duration-300" />
-                                        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                          <ImageIcon size={16} className="text-white" />
-                                        </div>
+                                {review.proof_image_url && (() => {
+                                  const proofUrls = review.proof_image_url.split("|||").map((u: string) => u.trim()).filter(Boolean)
+                                  if (!proofUrls.length) return null
+                                  return (
+                                    <div className="mb-5">
+                                      <p className="text-[8px] font-bold font-mono uppercase tracking-wider text-muted-foreground mb-2">
+                                        Verification Certificate{proofUrls.length > 1 ? "s" : ""}
+                                      </p>
+                                      <div className={`grid gap-1.5 ${
+                                        proofUrls.length === 1 ? "grid-cols-1" :
+                                        proofUrls.length === 2 ? "grid-cols-2" :
+                                        "grid-cols-3"
+                                      }`}>
+                                        {proofUrls.slice(0, proofUrls.length <= 3 ? proofUrls.length : 2).map((url: string, i: number) => (
+                                          <button
+                                            key={i}
+                                            onClick={() => setZoomedImgUrl(url)}
+                                            className="relative overflow-hidden rounded-xl border border-border/60 bg-black/20 cursor-pointer group hover:border-primary/50 transition focus:outline-none"
+                                            style={{ aspectRatio: "4/3" }}
+                                          >
+                                            <img src={url} alt={`Proof ${i + 1}`} className="h-full w-full object-cover group-hover:scale-105 transition duration-300" />
+                                            <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                              <ImageIcon size={16} className="text-white" />
+                                            </div>
+                                          </button>
+                                        ))}
+                                        {proofUrls.length > 3 && (
+                                          <button
+                                            onClick={() => setZoomedImgUrl(proofUrls[2])}
+                                            className="relative overflow-hidden rounded-xl border border-border/60 bg-black/20 cursor-pointer group hover:border-primary/50 transition focus:outline-none"
+                                            style={{ aspectRatio: "4/3" }}
+                                          >
+                                            <img src={proofUrls[2]} alt="Proof 3" className="h-full w-full object-cover group-hover:scale-105 transition duration-300" />
+                                            <div className="absolute inset-0 bg-black/55 flex items-center justify-center">
+                                              <span className="text-white text-sm font-bold">+{proofUrls.length - 2}</span>
+                                            </div>
+                                          </button>
+                                        )}
                                       </div>
-                                      <div className="flex-grow min-w-0">
-                                        <div className="flex items-center gap-1 mb-0.5">
-                                          <span className="text-[8px] font-bold font-mono text-primary flex items-center gap-0.5"><CheckCircle2 size={8} /> SECURE</span>
-                                          <span className="h-1 w-1 rounded-full bg-border" />
-                                          <span className="text-[7.5px] font-mono text-muted-foreground uppercase">Proof</span>
-                                        </div>
-                                        <h5 className="text-[9px] font-black font-display text-foreground truncate uppercase tracking-tight group-hover:text-primary transition-colors">View Receipt Verification</h5>
-                                        <p className="text-[7.5px] text-muted-foreground truncate font-semibold">Click to inspect receipt overlay</p>
-                                      </div>
-                                    </button>
-                                  </div>
-                                )}
+                                    </div>
+                                  )
+                                })()}
 
                                 {/* Dates / Payout Timeline Widget */}
                                 <div className="relative flex items-center justify-between mt-3 mb-6 px-4 py-2 rounded-2xl bg-foreground/[0.015] border border-border/40">

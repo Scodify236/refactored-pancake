@@ -65,8 +65,7 @@ function groupByDate(proofs: Proof[]): Map<string, Proof[]> {
 }
 
 function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], idx: number) => void }) {
-  const urls = proof.proof_image_url ? proof.proof_image_url.split(",").map(u => u.trim()).filter(Boolean) : []
-  const [activeIdx, setActiveIdx] = React.useState(0)
+  const urls = proof.proof_image_url ? proof.proof_image_url.split("|||").map(u => u.trim()).filter(Boolean) : []
 
   return (
     <div className="relative rounded-[1.5rem] border border-primary/20 bg-gradient-to-b from-card to-card/90 backdrop-blur-md p-5 flex flex-col gap-4 hover:border-primary/50 hover:shadow-[0_8px_30px_rgb(212,175,55,0.06)] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden group h-full">
@@ -84,41 +83,46 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
         </span>
       </div>
 
-      {/* 1. Full Image (Controlled viewport height) */}
+      {/* Proof image grid */}
       {urls.length > 0 && (
-        <div className="relative w-full h-[220px] rounded-xl overflow-hidden border border-border bg-black/45 shadow-inner">
-          <button
-            type="button"
-            onClick={() => onZoom(urls, activeIdx)}
-            className="w-full h-full cursor-zoom-in group/img focus:outline-none"
-          >
-            <img
-              src={urls[activeIdx]}
-              alt="Proof Active"
-              className="h-full w-full object-contain group-hover/img:scale-[1.02] transition duration-300"
-            />
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-              <span className="text-[9px] font-bold text-white bg-black/80 px-2.5 py-1.5 rounded-full backdrop-blur-sm tracking-wider uppercase">Zoom Receipt</span>
-            </div>
-          </button>
-        </div>
-      )}
-
-      {/* 3. Image switchers for multi-image logs */}
-      {urls.length > 1 && (
-        <div className="flex items-center gap-1.5 overflow-x-auto py-1">
-          {urls.map((url, i) => (
+        <div
+          className={`grid gap-1.5 ${
+            urls.length === 1 ? "grid-cols-1" :
+            urls.length === 2 ? "grid-cols-2" :
+            "grid-cols-3"
+          }`}
+        >
+          {urls.slice(0, urls.length <= 3 ? urls.length : 2).map((url, i) => (
             <button
               key={i}
               type="button"
-              onClick={() => setActiveIdx(i)}
-              className={`relative h-10 w-10 rounded-lg overflow-hidden border transition shrink-0 ${
-                activeIdx === i ? "border-primary ring-1 ring-primary/30" : "border-border/60 hover:border-muted-foreground/40"
-              }`}
+              onClick={() => onZoom(urls, i)}
+              className="relative overflow-hidden rounded-xl border border-border/60 bg-black/40 cursor-zoom-in group/img focus:outline-none"
+              style={{ aspectRatio: urls.length === 1 ? "16/9" : "4/3" }}
             >
-              <img src={url} alt="thumbnail" className="h-full w-full object-cover" />
+              <img
+                src={url}
+                alt={`Proof ${i + 1}`}
+                className="w-full h-full object-cover group-hover/img:scale-[1.03] transition duration-300"
+              />
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                <span className="text-[9px] font-bold text-white bg-black/80 px-2 py-1 rounded-full backdrop-blur-sm tracking-wider uppercase">Zoom</span>
+              </div>
             </button>
           ))}
+          {urls.length > 3 && (
+            <button
+              type="button"
+              onClick={() => onZoom(urls, 2)}
+              className="relative overflow-hidden rounded-xl border border-border/60 bg-black/40 cursor-zoom-in group/img focus:outline-none"
+              style={{ aspectRatio: "4/3" }}
+            >
+              <img src={urls[2]} alt="Proof 3" className="w-full h-full object-cover group-hover/img:scale-[1.03] transition duration-300" />
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">+{urls.length - 2}</span>
+              </div>
+            </button>
+          )}
         </div>
       )}
 
@@ -168,7 +172,7 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
 }
 
 function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], idx: number) => void }) {
-  const urls = proof.proof_image_url ? proof.proof_image_url.split(",").map(u => u.trim()).filter(Boolean) : []
+  const urls = proof.proof_image_url ? proof.proof_image_url.split("|||").map(u => u.trim()).filter(Boolean) : []
 
   return (
     <div className="relative rounded-[1.25rem] border border-primary/20 bg-gradient-to-b from-card to-card/95 backdrop-blur-md p-5 flex flex-col gap-4 hover:border-primary/40 hover:shadow-[0_8px_30px_rgb(212,175,55,0.04)] transition-all duration-300 group">

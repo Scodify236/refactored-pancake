@@ -28,7 +28,7 @@ function formatDate(dateStr: string | null | undefined) {
 }
 
 function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], idx: number) => void }) {
-  const urls = proof.proof_image_url ? proof.proof_image_url.split(",").map(u => u.trim()).filter(Boolean) : []
+  const urls = proof.proof_image_url ? proof.proof_image_url.split("|||").map(u => u.trim()).filter(Boolean) : []
 
   return (
     <div className="relative rounded-[1.5rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col gap-3 hover:border-primary/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden group">
@@ -70,35 +70,54 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
         </div>
       )}
 
-      {/* Proof images */}
+      {/* Proof images grid */}
       {urls.length > 0 && (
-        <button
-          type="button"
-          onClick={() => onZoom(urls, 0)}
-          className="w-full flex items-center gap-3 p-2 rounded-xl border transition-all duration-300 group/btn cursor-pointer text-left focus:outline-none bg-foreground/[0.01] border-border/60 hover:border-primary/40 hover:bg-primary/[0.03]"
-        >
-          <div className="flex gap-1 shrink-0">
-            {urls.slice(0, 3).map((url, i) => (
-              <div key={i} className="relative h-9 w-9 rounded-lg overflow-hidden border border-border bg-black/30 shadow-sm">
-                <img src={url} alt="Proof receipt" className="h-full w-full object-cover group-hover/btn:scale-105 transition duration-300" />
-              </div>
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-1 mb-0.5">
+            <CheckCircle size={8} className="text-primary" />
+            <span className="text-[8px] font-bold text-primary uppercase tracking-wide">Verified Receipt{urls.length > 1 ? "s" : ""}</span>
+          </div>
+          <div
+            className={`grid gap-1.5 ${
+              urls.length === 1 ? "grid-cols-1" :
+              urls.length === 2 ? "grid-cols-2" :
+              "grid-cols-3"
+            }`}
+          >
+            {urls.slice(0, urls.length <= 3 ? urls.length : 2).map((url, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => onZoom(urls, i)}
+                className="relative overflow-hidden rounded-xl border border-border/60 bg-black/20 cursor-pointer group/img focus:outline-none"
+                style={{ aspectRatio: "4/3" }}
+              >
+                <img
+                  src={url}
+                  alt={`Proof ${i + 1}`}
+                  className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300"
+                />
+              </button>
             ))}
             {urls.length > 3 && (
-              <div className="h-9 w-9 rounded-lg border border-border/60 bg-foreground/[0.04] flex items-center justify-center text-[8px] font-bold text-muted-foreground">
-                +{urls.length - 3}
-              </div>
+              <button
+                type="button"
+                onClick={() => onZoom(urls, 2)}
+                className="relative overflow-hidden rounded-xl border border-border/60 bg-black/20 cursor-pointer group/img focus:outline-none"
+                style={{ aspectRatio: "4/3" }}
+              >
+                <img
+                  src={urls[2]}
+                  alt="Proof 3"
+                  className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300"
+                />
+                <div className="absolute inset-0 bg-black/55 flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">+{urls.length - 2}</span>
+                </div>
+              </button>
             )}
           </div>
-          <div>
-            <div className="flex items-center gap-1 mb-0.5">
-              <CheckCircle size={8} className="text-primary" />
-              <span className="text-[8px] font-bold text-primary uppercase tracking-wide">Verified Receipt</span>
-            </div>
-            <span className="text-[9px] font-bold text-foreground">
-              {urls.length} image{urls.length > 1 ? "s" : ""} — click to view
-            </span>
-          </div>
-        </button>
+        </div>
       )}
 
       {/* Footer — name only, no avatar, no stars */}

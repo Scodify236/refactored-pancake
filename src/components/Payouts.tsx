@@ -122,13 +122,7 @@ export function Payouts() {
                 No payout runs scheduled yet.
               </div>
             ) : (
-              <div className={`grid gap-6 ${
-                payouts.length === 1
-                  ? "grid-cols-1 max-w-sm mx-auto"
-                  : payouts.length === 2
-                  ? "grid-cols-1 sm:grid-cols-2 max-w-2xl mx-auto"
-                  : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-              }`}>
+              <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {payouts.map((p, idx) => {
                   const sub = new Date(p.submission_date)
                   const pay = new Date(p.payout_date)
