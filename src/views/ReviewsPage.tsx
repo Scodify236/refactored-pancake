@@ -68,12 +68,24 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
   const [activeIdx, setActiveIdx] = React.useState(0)
 
   return (
-    <div className="relative rounded-[1.5rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col gap-3.5 hover:border-primary/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden group h-full">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <div className="relative rounded-[1.5rem] border border-primary/20 bg-gradient-to-b from-card to-card/90 backdrop-blur-md p-5 flex flex-col gap-4 hover:border-primary/50 hover:shadow-[0_8px_30px_rgb(212,175,55,0.06)] hover:-translate-y-0.5 transition-all duration-300 overflow-hidden group h-full">
+      {/* Glow highlight */}
+      <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
-      {/* 1. Full Image (Viewport/card container controlled height responsive) */}
+      {/* Top Header: Client & Verification */}
+      <div className="flex items-center justify-between pb-3 border-b border-border/40">
+        <div>
+          <h4 className="text-[12px] font-bold text-foreground tracking-tight">{proof.name}</h4>
+          <span className="text-[9px] text-muted-foreground font-mono">{proof.role}</span>
+        </div>
+        <span className="text-[8px] font-extrabold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
+          <CheckCircle size={8} /> Verified Ledger
+        </span>
+      </div>
+
+      {/* 1. Full Image (Controlled viewport height) */}
       {urls.length > 0 && (
-        <div className="relative w-full h-[200px] sm:h-[320px] rounded-xl overflow-hidden border border-border bg-black/30">
+        <div className="relative w-full h-[220px] rounded-xl overflow-hidden border border-border bg-black/45 shadow-inner">
           <button
             type="button"
             onClick={() => onZoom(urls, activeIdx)}
@@ -84,44 +96,23 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
               alt="Proof Active"
               className="h-full w-full object-contain group-hover/img:scale-[1.02] transition duration-300"
             />
-            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-              <span className="text-[10px] font-bold text-white bg-black/75 px-3 py-1.5 rounded-full backdrop-blur-sm">Click to Zoom</span>
+            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+              <span className="text-[9px] font-bold text-white bg-black/80 px-2.5 py-1.5 rounded-full backdrop-blur-sm tracking-wider uppercase">Zoom Receipt</span>
             </div>
           </button>
         </div>
       )}
 
-      {/* 2. Star Rating under active image */}
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <div className="flex items-center gap-0.5 text-primary">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <span key={i} className="text-sm">
-              {i < (proof.rating || 5) ? "★" : "☆"}
-            </span>
-          ))}
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="text-[8.5px] font-bold rounded-full px-2.5 py-1 border text-primary bg-primary/10 border-primary/20 uppercase tracking-wider">
-            {proof.trade_type}
-          </span>
-          {proof.amount_label && (
-            <span className="text-[8.5px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1">
-              {proof.amount_label}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* 3. Small thumbnail switches to change active image */}
+      {/* 3. Image switchers for multi-image logs */}
       {urls.length > 1 && (
-        <div className="flex items-center gap-2 overflow-x-auto py-1">
+        <div className="flex items-center gap-1.5 overflow-x-auto py-1">
           {urls.map((url, i) => (
             <button
               key={i}
               type="button"
               onClick={() => setActiveIdx(i)}
-              className={`relative h-11 w-11 rounded-lg overflow-hidden border transition shrink-0 ${
-                activeIdx === i ? "border-primary ring-1 ring-primary/45" : "border-border hover:border-muted-foreground/50"
+              className={`relative h-10 w-10 rounded-lg overflow-hidden border transition shrink-0 ${
+                activeIdx === i ? "border-primary ring-1 ring-primary/30" : "border-border/60 hover:border-muted-foreground/40"
               }`}
             >
               <img src={url} alt="thumbnail" className="h-full w-full object-cover" />
@@ -130,33 +121,44 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
         </div>
       )}
 
-      {/* 4. Testimonial Quote & Admin Message below switcher */}
-      <div className="flex flex-col gap-2 flex-1 pt-1">
-        <div className="flex gap-2">
-          <Quote size={12} className="text-primary/25 shrink-0 mt-0.5" />
-          <p className="text-[11px] leading-relaxed text-muted-foreground font-medium">
-            {proof.quote}
-          </p>
+      {/* Structured Ledger Detail Grid */}
+      <div className="grid grid-cols-2 gap-2 bg-foreground/[0.015] border border-border/30 rounded-xl p-3 text-[10px] font-mono text-muted-foreground">
+        <div>
+          <span className="block text-[8px] uppercase tracking-wider text-muted-foreground/60 mb-0.5">Asset Traded</span>
+          <span className="font-bold text-foreground text-[11px] uppercase tracking-tight">{proof.trade_type}</span>
         </div>
-
-        {/* Admin Complement Verification Note */}
-        <div className="p-2.5 rounded-xl bg-foreground/[0.01] border border-border/80 text-left mt-2">
-          <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">Admin Verification Note</span>
-          <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium">
-            "Trade successfully completed. Digital voucher of {proof.trade_type} received and payout processed securely under verified transaction protocol."
-          </p>
+        <div className="text-right">
+          <span className="block text-[8px] uppercase tracking-wider text-muted-foreground/60 mb-0.5">Net Payout</span>
+          <span className="font-bold text-emerald-400 text-[11px]">
+            {proof.amount_label || "Verified Done"}
+          </span>
         </div>
+        {proof.gc_received_date && (
+          <div className="col-span-2 mt-1 pt-1.5 border-t border-border/20 flex justify-between text-[9px]">
+            <span>Settled: {formatDate(proof.payment_sent_date || proof.created_at)}</span>
+            <span className="text-[8px] text-primary font-bold">100% SECURE</span>
+          </div>
+        )}
       </div>
 
-      {/* Footer / Meta details */}
-      <div className="flex items-center justify-between pt-2 border-t border-border/30 mt-auto">
-        <div>
-          <p className="text-[11px] font-bold text-foreground">{proof.name}</p>
-          <p className="text-[9px] text-muted-foreground">{proof.role}</p>
+      {/* Quote & Stars */}
+      <div className="flex flex-col gap-2 pt-1">
+        <div className="flex items-center gap-0.5 text-primary text-[10px]">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <span key={i}>{i < (proof.rating || 5) ? "★" : "☆"}</span>
+          ))}
         </div>
-        <span className="text-[7.5px] font-bold text-emerald-400 flex items-center gap-1 uppercase tracking-wider">
-          <CheckCircle size={8} className="fill-emerald-400/20" /> Admin Verified
-        </span>
+        <p className="text-[11px] leading-relaxed text-muted-foreground italic font-medium font-sans">
+          "{proof.quote}"
+        </p>
+      </div>
+
+      {/* Admin Note Badge */}
+      <div className="p-2.5 rounded-xl bg-primary/[0.02] border border-primary/20 text-left mt-auto">
+        <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">Transaction Verification Note</span>
+        <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium">
+          "Trade settled. {proof.trade_type} voucher confirmed and net value payout credited to verified client channels."
+        </p>
       </div>
     </div>
   )
@@ -164,15 +166,14 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
 
 function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], idx: number) => void }) {
   const urls = proof.proof_image_url ? proof.proof_image_url.split(",").map(u => u.trim()).filter(Boolean) : []
-  const [activeIdx, setActiveIdx] = React.useState(0)
 
   return (
-    <div className="relative rounded-[1.25rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col gap-4 hover:border-primary/35 transition-all duration-300 group">
-      {/* 1. Multiple Images Horizontally (Viewport / Container height responsive) */}
+    <div className="relative rounded-[1.25rem] border border-primary/20 bg-gradient-to-b from-card to-card/95 backdrop-blur-md p-5 flex flex-col gap-4 hover:border-primary/40 hover:shadow-[0_8px_30px_rgb(212,175,55,0.04)] transition-all duration-300 group">
+      {/* 1. Multiple Images Horizontally */}
       {urls.length > 0 && (
-        <div className="flex gap-4 overflow-x-auto py-2 scrollbar-thin scrollbar-thumb-border">
+        <div className="flex gap-4 overflow-x-auto py-1 scrollbar-thin scrollbar-thumb-border">
           {urls.map((url, idx) => (
-            <div key={idx} className="relative h-[220px] sm:h-[360px] min-w-[220px] sm:min-w-[480px] rounded-xl overflow-hidden border border-border bg-black/30 shrink-0">
+            <div key={idx} className="relative h-[240px] sm:h-[320px] min-w-[200px] sm:min-w-[420px] rounded-xl overflow-hidden border border-border bg-black/45 shrink-0">
               <button
                 type="button"
                 onClick={() => onZoom(urls, idx)}
@@ -183,8 +184,8 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
                   alt={`Proof Timeline ${idx + 1}`}
                   className="h-full w-full object-contain group-hover/img:scale-[1.02] transition duration-300"
                 />
-                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="text-[10px] font-bold text-white bg-black/75 px-3 py-1.5 rounded-full backdrop-blur-sm">Click to Zoom</span>
+                <div className="absolute inset-0 bg-black/25 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-[9px] font-bold text-white bg-black/80 px-2.5 py-1 rounded-full backdrop-blur-sm tracking-wider uppercase">Zoom Receipt</span>
                 </div>
               </button>
             </div>
@@ -192,45 +193,41 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
         </div>
       )}
 
-      {/* 2. Star Rating under active image */}
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <div className="flex items-center gap-0.5 text-primary">
+      {/* Meta Grid info banner */}
+      <div className="flex items-center justify-between gap-3 border-b border-border/40 pb-3 flex-wrap">
+        <div className="flex items-center gap-1.5 text-primary text-xs">
           {Array.from({ length: 5 }).map((_, i) => (
-            <span key={i} className="text-sm">
-              {i < (proof.rating || 5) ? "★" : "☆"}
-            </span>
+            <span key={i}>{i < (proof.rating || 5) ? "★" : "☆"}</span>
           ))}
         </div>
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
           {proof.amount_label && (
-            <span className="text-[8.5px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1 w-fit">
+            <span className="text-[8.5px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1">
               {proof.amount_label}
             </span>
           )}
-          <span className="text-[8.5px] font-bold rounded-full px-2.5 py-1 border text-primary bg-primary/10 border-primary/20 uppercase tracking-wider w-fit">
+          <span className="text-[8.5px] font-bold rounded-full px-2.5 py-1 border text-primary bg-primary/10 border-primary/20 uppercase tracking-wider">
             {proof.trade_type}
           </span>
           {proof.payment_sent_date && (
-            <div className="text-[10px] font-bold text-foreground bg-foreground/[0.03] border border-border px-2.5 py-1 rounded-full">
-              Paid Out: {formatDate(proof.payment_sent_date)}
+            <div className="text-[9px] font-mono font-bold text-foreground bg-foreground/[0.03] border border-border px-3 py-1 rounded-full">
+              Settle Date: {formatDate(proof.payment_sent_date)}
             </div>
           )}
         </div>
       </div>
 
-      {/* 4. Testimonial & Admin Verification Note */}
-      <div className="flex flex-col gap-2.5 pt-1">
-        <div className="flex gap-2">
-          <Quote size={12} className="text-primary/20 shrink-0 mt-0.5" />
-          <p className="text-[11.5px] leading-relaxed text-muted-foreground font-medium">
-            {proof.quote}
-          </p>
-        </div>
+      {/* Quote & Description block */}
+      <div className="flex flex-col gap-2.5">
+        <p className="text-[11px] leading-relaxed text-muted-foreground font-sans">
+          <span className="font-bold text-foreground font-display mr-1">{proof.name} ({proof.role}):</span>
+          "{proof.quote}"
+        </p>
 
         {/* Admin Complement note under image */}
-        <div className="p-2.5 rounded-xl bg-foreground/[0.01] border border-border/80 text-left">
+        <div className="p-2.5 rounded-xl bg-primary/[0.02] border border-primary/20 text-left">
           <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">Admin Verification Note</span>
-          <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium">
+          <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium font-sans">
             "Trade successfully completed. Digital voucher of {proof.trade_type} received and payout processed securely under verified transaction protocol."
           </p>
         </div>
@@ -238,11 +235,8 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
 
       {/* Footer / User Meta */}
       <div className="flex items-center justify-between pt-2 border-t border-border/30 mt-auto">
-        <div>
-          <p className="text-[11px] font-bold text-foreground">{proof.name}</p>
-          <p className="text-[9px] text-muted-foreground">{proof.role}</p>
-        </div>
-        <span className="text-[7.5px] font-bold text-emerald-400 flex items-center gap-1 uppercase">
+        <span className="text-[8px] font-mono text-muted-foreground/60">ID: {proof.id}</span>
+        <span className="text-[8px] font-extrabold text-emerald-400 flex items-center gap-1 uppercase tracking-wider">
           <CheckCircle size={8} className="fill-emerald-400/20" /> Admin Verified
         </span>
       </div>
