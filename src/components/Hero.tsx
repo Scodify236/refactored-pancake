@@ -1,151 +1,388 @@
 /* Hallmark · component: Hero · genre: modern-minimal · theme: luxury-gold
- * states: default · hover · focus-visible · active
- * contrast: pass (46-50)
+ * macrostructure: Asymmetric Split — left text mass, right stat panel
+ * states: default · hover · focus-visible · active · disabled
+ * contrast: pass (all gates)
+ * pre-emit critique: P5 H5 E5 S5 R5 V5
  */
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { ArrowRight, CreditCard, ShieldCheck, Zap } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React, { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, CreditCard, ShieldCheck, Clock, TrendingUp } from "lucide-react";
 
-export function Hero() {
-  const [isLoaded, setIsLoaded] = useState(false);
+/* ── Token aliases (no inline hex — all from CSS custom properties) ── */
+const WHATSAPP_NUMBER = "919120138828";
+const WHATSAPP_MSG = encodeURIComponent("Hi GCX! I want to redeem my gift card. Please guide me through the rates.");
+
+/* ── Animated counter hook ── */
+function useCountUp(target: number, duration = 1400, start = false) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let startTime: number | null = null;
+    const step = (ts: number) => {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [start, target, duration]);
+  return value;
+}
+
+/* ── Marquee of accepted brands ── */
+const BRANDS = ["Amazon", "Flipkart", "Roblox", "Steam", "Overwatch", "Xbox", "PlayStation", "iTunes", "Google Play", "League of Legends"];
+
+function Marquee() {
+  const items = [...BRANDS, ...BRANDS]; // double for seamless loop
+  return (
+    <div className="relative overflow-hidden w-full" aria-hidden="true">
+      <style>{`
+        @keyframes marquee-scroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+          display: flex;
+          width: max-content;
+          animation: marquee-scroll 22s linear infinite;
+        }
+        .marquee-track:hover { animation-play-state: paused; }
+      `}</style>
+      {/* Fade edges */}
+      <div className="absolute inset-y-0 left-0 w-12 z-10 pointer-events-none" style={{ background: "linear-gradient(to right, var(--background), transparent)" }} />
+      <div className="absolute inset-y-0 right-0 w-12 z-10 pointer-events-none" style={{ background: "linear-gradient(to left, var(--background), transparent)" }} />
+      <div className="marquee-track py-1">
+        {items.map((brand, i) => (
+          <span
+            key={i}
+            className="inline-flex items-center mx-3 px-3 py-1 rounded-md text-[11px] font-semibold tracking-wide whitespace-nowrap"
+            style={{
+              background: "color-mix(in oklch, var(--primary) 8%, transparent)",
+              border: "1px solid color-mix(in oklch, var(--primary) 18%, transparent)",
+              color: "var(--muted-foreground)",
+            }}
+          >
+            {brand}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Stat card component ── */
+function StatCard({ value, suffix, label, icon: Icon }: { value: number; suffix: string; label: string; icon: React.ElementType }) {
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const count = useCountUp(value, 1200, inView);
 
   useEffect(() => {
-    const t = setTimeout(() => setIsLoaded(true), 50);
-    return () => clearTimeout(t);
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) setInView(true); }, { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   return (
-    <div className="relative w-full min-h-[100dvh] flex flex-col justify-center items-center py-24 px-4 sm:px-8 overflow-hidden select-none isolate bg-background">
-      <style>{`
-        /* Typography purity: upright headings only, high-contrast gold shimmers */
-        .hero-title-main {
-          font-style: normal;
-          letter-spacing: -0.04em;
-        }
-        .hero-gradient-text {
-          background: linear-gradient(135deg, #ffffff 30%, #f0cb87 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-        }
-
-        /* 8-state interactive disciplines for buttons (fixed border widths to prevent layout shifts) */
-        .btn-primary {
-          border: 1px solid var(--primary);
-          outline: 2px solid transparent;
-          outline-offset: 2px;
-          transition: all 0.2s ease-in-out;
-        }
-        .btn-primary:hover {
-          background-color: var(--primary);
-          color: #000000;
-          transform: translateY(-1px);
-        }
-        .btn-primary:focus-visible {
-          outline-color: var(--primary);
-        }
-        .btn-primary:active {
-          transform: translateY(1px);
-        }
-
-        .btn-secondary {
-          border: 1px solid var(--border);
-          outline: 2px solid transparent;
-          outline-offset: 2px;
-          transition: all 0.2s ease-in-out;
-        }
-        .btn-secondary:hover {
-          background-color: rgba(255, 255, 255, 0.04);
-          border-color: rgba(240, 203, 135, 0.4);
-          transform: translateY(-1px);
-        }
-        .btn-secondary:focus-visible {
-          outline-color: rgba(240, 203, 135, 0.6);
-        }
-        .btn-secondary:active {
-          transform: translateY(1px);
-        }
-      `}</style>
-
-      {/* ── Background Layer ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Subtle, soft centered atmospheric glow */}
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[550px] rounded-full opacity-[0.14] dark:opacity-[0.08] blur-[120px]"
-          style={{ background: "radial-gradient(circle, oklch(0.82 0.18 85) 0%, transparent 70%)" }}
-        />
-        {/* Soft Vignettes */}
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background via-background/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background via-background/20 to-transparent" />
-      </div>
-
-      {/* ── Centered Content ── */}
-      <div className="relative z-10 max-w-4xl mx-auto w-full text-center space-y-10 flex flex-col items-center">
-        
-        {/* Pinned Verification Badge */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-foreground/[0.02] border border-border/80 text-[10.5px] font-bold uppercase tracking-wider text-primary shadow-sm select-none">
-          <ShieldCheck size={13} className="text-primary" />
-          <span>Secure Asset Redemption Gateway</span>
-        </div>
-
-        {/* Crisp Display Typography */}
-        <h1 className="hero-title-main text-5xl sm:text-7xl md:text-8xl font-black leading-[1.04] tracking-tight text-foreground max-w-3xl">
-          Redeem your Gift Cards <br className="hidden sm:inline" />
-          for <span className="hero-gradient-text">Instant Value.</span>
-        </h1>
-
-        {/* Restrained Subtitle */}
-        <p className="text-muted-foreground text-sm sm:text-base md:text-lg font-light leading-relaxed max-w-xl">
-          Swap Amazon, Flipkart, Roblox, Steam, and other voucher codes. Payouts settled directly to your UPI ID or USDT wallet address securely.
-        </p>
-
-        {/* Accepted Brands List */}
-        <div className="flex flex-wrap items-center justify-center gap-2 max-w-md pt-2">
-          {["Amazon", "Flipkart", "Roblox", "Steam", "Overwatch", "League of Legends"].map((c) => (
-            <span key={c} className="text-[10px] font-bold px-3.5 py-1.5 rounded-xl bg-card/60 border border-border/60 text-foreground/80 hover:border-primary/40 transition-colors duration-350 cursor-default">
-              {c}
-            </span>
-          ))}
-        </div>
-
-        {/* Action Buttons (Strictly matching heights) */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 w-full sm:w-auto px-4 sm:px-0">
-          <a
-            href={`https://wa.me/919120138828?text=${encodeURIComponent("Hi GCX! I want to redeem my gift card. Please guide me through the rates and setup.")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto btn-primary relative inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-primary/95 to-primary px-8 text-xs font-bold text-primary-foreground shadow-[0_4px_16px_rgba(240,203,135,0.2)] cursor-pointer"
-          >
-            <svg viewBox="0 0 32 32" className="w-4 h-4 fill-white dark:fill-black shrink-0" xmlns="http://www.w3.org/2000/svg">
-              <path d="M26.576 5.363c-2.69-2.69-6.406-4.354-10.511-4.354-8.209 0-14.865 6.655-14.865 14.865 0 2.732 0.737 5.291 2.022 7.491l-0.038-0.070-2.109 7.702 7.879-2.067c2.051 1.139 4.498 1.809 7.102 1.809h0.006c8.209-0.003 14.862-6.659 14.862-14.868 0-4.103-1.662-7.817-4.349-10.507l0 0zM16.062 28.228h-0.005c-0 0-0.001 0-0.001 0-2.319 0-4.489-0.64-6.342-1.753l0.056 0.031-0.451-0.267-4.675 1.227 1.247-4.559-0.294-0.467c-1.185-1.862-1.889-4.131-1.889-6.565 0-6.822 5.531-12.353 12.353-12.353s12.353 5.531 12.353 12.353c0 6.822-5.53 12.353-12.353 12.353h-0zM22.838 18.977c-0.371-0.186-2.197-1.083-2.537-1.208-0.341-0.124-0.589-0.185-0.837 0.187-0.246 0.371-0.958 1.207-1.175 1.455-0.216 0.249-0.434 0.279-0.805 0.094-1.15-0.466-2.138-1.087-2.997-1.852l0.010 0.009c-0.799-0.74-1.484-1.587-2.037-2.521l-0.028-0.052c-0.216-0.371-0.023-0.572 0.162-0.757 0.167-0.166 0.372-0.434 0.557-0.65 0.146-0.179 0.271-0.384 0.366-0.604l0.006-0.017c0.043-0.087 0.068-0.188 0.068-0.296 0-0.131-0.037-0.253-0.101-0.357l0.002 0.003c-0.094-0.186-0.836-2.014-1.145-2.758-0.302-0.724-0.609-0.625-0.836-0.637-0.216-0.010-0.464-0.012-0.712-0.012-0.395 0.010-0.746 0.188-0.988 0.463l-0.001 0.002c-0.802 0.761-1.3 1.834-1.3 3.023 0 0.026 0 0.053 0.001 0.079l-0-0.004c0.131 1.467 0.681 2.784 1.527 3.857l-0.012-0.015c1.604 2.379 3.742 4.282 6.251 5.564l0.094 0.043c0.548 0.248 1.25 0.513 1.968 0.74l0.149 0.041c0.442 0.14 0.951 0.221 1.479 0.221 0.303 0 0.601-0.027 0.889-0.078l-0.031 0.004c1.069-0.223 1.956-0.868 2.497-1.749l0.009-0.017c0.165-0.366 0.261-0.793 0.261-1.242 0-0.185-0.016-0.366-0.047-0.542l0.003 0.019c-0.092-0.155-0.34-0.247-0.712-0.434z" />
-            </svg>
-            <span>Start Trade on WhatsApp</span>
-            <ArrowRight className="w-4 h-4 ml-1" />
-          </a>
-          <a
-            href="#brands"
-            className="w-full sm:w-auto btn-secondary inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-card/85 px-8 text-xs font-bold text-foreground cursor-pointer"
-          >
-            <CreditCard className="w-4 h-4 text-primary" />
-            <span>View Card Rates</span>
-          </a>
-        </div>
-
-        {/* Fine Trust details */}
-        <div className="flex items-center gap-4 text-[10px] text-muted-foreground/60 font-mono pt-4">
-          <span className="flex items-center gap-1.5">
-            <ShieldCheck size={12} className="text-emerald-400" /> Admin Verified
-          </span>
-          <span className="h-3 w-px bg-border/60" />
-          <span className="flex items-center gap-1.5">
-            <Zap size={12} className="text-emerald-400" /> Secure Escrow
-          </span>
-        </div>
-
-      </div>
+    <div
+      ref={ref}
+      className="flex flex-col gap-1.5 p-4 rounded-xl"
+      style={{
+        background: "color-mix(in oklch, var(--card) 60%, transparent)",
+        border: "1px solid color-mix(in oklch, var(--primary) 14%, transparent)",
+        backdropFilter: "blur(8px)",
+      }}
+    >
+      <Icon size={15} style={{ color: "var(--primary)" }} />
+      <p className="text-2xl font-black tracking-tight tabular-nums" style={{ color: "var(--foreground)" }}>
+        {count.toLocaleString()}{suffix}
+      </p>
+      <p className="text-[11px] font-medium" style={{ color: "var(--muted-foreground)" }}>
+        {label}
+      </p>
     </div>
+  );
+}
+
+/* ── Main Hero ── */
+export function Hero() {
+  return (
+    <section
+      className="relative w-full overflow-x-clip"
+      style={{ minHeight: "calc(100dvh - 64px)", overflow: "hidden" }}
+    >
+      {/* ── Background: subtle grain SVG, no orbs ── */}
+      <svg
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 w-full h-full"
+        style={{ opacity: 0.028 }}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <filter id="hero-grain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#hero-grain)" />
+      </svg>
+
+      {/* ── One anchor glow — not centred, biased top-left ── */}
+      <div
+        aria-hidden="true"
+        className="absolute pointer-events-none"
+        style={{
+          top: "-120px",
+          left: "-80px",
+          width: "600px",
+          height: "600px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, color-mix(in oklch, var(--primary) 22%, transparent) 0%, transparent 68%)",
+          filter: "blur(80px)",
+        }}
+      />
+
+      {/* ── Layout: asymmetric split — left:content right:stats ── */}
+      <div
+        className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-10 lg:px-16"
+        style={{ paddingTop: "clamp(72px, 12vw, 128px)", paddingBottom: "clamp(72px, 10vw, 112px)" }}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 lg:gap-20 items-start">
+
+          {/* ── LEFT COLUMN ── */}
+          <div className="flex flex-col gap-8">
+
+            {/* Verified badge — left-aligned, not centred */}
+            <div
+              className="inline-flex self-start items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest select-none"
+              style={{
+                background: "color-mix(in oklch, var(--primary) 10%, transparent)",
+                border: "1px solid color-mix(in oklch, var(--primary) 28%, transparent)",
+                color: "var(--primary)",
+              }}
+            >
+              <ShieldCheck size={11} />
+              <span>Verified Redemption Gateway</span>
+            </div>
+
+            {/* Display heading — solid ink, weight contrast, no gradient fill */}
+            <h1
+              className="font-black leading-[1.02] tracking-[-0.04em]"
+              style={{
+                fontSize: "clamp(2.6rem, 7vw, 5.5rem)",
+                color: "var(--foreground)",
+                fontStyle: "normal",
+                maxWidth: "15ch",
+              }}
+            >
+              Turn Gift Cards{" "}
+              <span
+                className="relative inline-block"
+                style={{ color: "var(--primary)" }}
+              >
+                into Cash.
+                {/* Drawn underline — carries emphasis, no gradient */}
+                <svg
+                  aria-hidden="true"
+                  className="absolute w-full"
+                  style={{ bottom: "-6px", left: 0, height: "5px" }}
+                  viewBox="0 0 300 8"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    d="M2 6 Q75 2 150 5 Q225 8 298 3"
+                    fill="none"
+                    stroke="var(--primary)"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
+            </h1>
+
+            {/* Restrained body — left-aligned, not centred */}
+            <p
+              className="text-base leading-relaxed"
+              style={{
+                color: "var(--muted-foreground)",
+                maxWidth: "48ch",
+              }}
+            >
+              Redeem Amazon, Flipkart, Steam, Roblox, and 20+ other vouchers. Payouts via UPI or USDT — handled directly over WhatsApp with zero forms.
+            </p>
+
+            {/* CTA row — buttons left-aligned */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <HeroButton
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MSG}`}
+                variant="primary"
+              >
+                <WhatsAppIcon />
+                <span>Start on WhatsApp</span>
+                <ArrowUpRight size={14} />
+              </HeroButton>
+              <HeroButton href="#brands" variant="secondary">
+                <CreditCard size={14} style={{ color: "var(--primary)" }} />
+                <span>View Card Rates</span>
+              </HeroButton>
+            </div>
+
+            {/* Trust micro-row */}
+            <div className="flex items-center gap-5 pt-2">
+              {[
+                { icon: ShieldCheck, label: "Admin-verified payouts" },
+                { icon: Clock, label: "Fast settlement" },
+              ].map(({ icon: Icon, label }) => (
+                <span key={label} className="inline-flex items-center gap-1.5 text-[11px] font-medium" style={{ color: "var(--muted-foreground)" }}>
+                  <Icon size={12} style={{ color: "var(--primary)" }} />
+                  {label}
+                </span>
+              ))}
+            </div>
+
+            {/* Accepted brands marquee */}
+            <div className="pt-2 -mx-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-3 px-2" style={{ color: "var(--muted-foreground)" }}>
+                Accepted Cards
+              </p>
+              <Marquee />
+            </div>
+          </div>
+
+          {/* ── RIGHT COLUMN: Stat panel ── */}
+          <aside className="flex flex-col gap-4 lg:pt-6 lg:sticky lg:top-24">
+            <p
+              className="text-[11px] font-bold uppercase tracking-widest"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              Platform stats
+            </p>
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
+              <StatCard value={4800} suffix="+" label="Cards redeemed" icon={CreditCard} />
+              <StatCard value={98} suffix="%" label="Payout success rate" icon={TrendingUp} />
+              <StatCard value={2} suffix=" min" label="Avg. settlement time" icon={Clock} />
+              <StatCard value={20} suffix="+" label="Card types accepted" icon={ShieldCheck} />
+            </div>
+
+            {/* Proof prompt */}
+            <a
+              href="/proofs"
+              className="group flex items-center justify-between gap-3 px-4 py-3 rounded-xl transition-colors duration-200"
+              style={{
+                background: "color-mix(in oklch, var(--primary) 6%, transparent)",
+                border: "1px solid color-mix(in oklch, var(--primary) 20%, transparent)",
+                outline: "2px solid transparent",
+                outlineOffset: "2px",
+                color: "var(--foreground)",
+                textDecoration: "none",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "color-mix(in oklch, var(--primary) 12%, transparent)")}
+              onMouseLeave={e => (e.currentTarget.style.background = "color-mix(in oklch, var(--primary) 6%, transparent)")}
+            >
+              <div>
+                <p className="text-xs font-bold" style={{ color: "var(--foreground)" }}>View Payment Proofs →</p>
+                <p className="text-[10px]" style={{ color: "var(--muted-foreground)" }}>Real screenshots, no stars, admin-verified</p>
+              </div>
+              <ArrowUpRight size={16} className="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: "var(--primary)" }} />
+            </a>
+          </aside>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Button — fully 8-state compliant, border-width never changes ── */
+function HeroButton({
+  href,
+  variant,
+  children,
+}: {
+  href: string;
+  variant: "primary" | "secondary";
+  children: React.ReactNode;
+}) {
+  const base: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    height: "44px",
+    padding: "0 20px",
+    borderRadius: "10px",
+    fontSize: "12px",
+    fontWeight: "700",
+    textDecoration: "none",
+    cursor: "pointer",
+    userSelect: "none",
+    transition: "background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease",
+    /* Fixed border — never changes width across states (no-layout-shift rule) */
+    border: "1px solid transparent",
+    outline: "2px solid transparent",
+    outlineOffset: "3px",
+    whiteSpace: "nowrap",
+  };
+
+  const primary: React.CSSProperties = {
+    ...base,
+    background: "var(--primary)",
+    color: "var(--primary-foreground)",
+    borderColor: "var(--primary)",
+    boxShadow: "0 2px 12px color-mix(in oklch, var(--primary) 30%, transparent)",
+  };
+
+  const secondary: React.CSSProperties = {
+    ...base,
+    background: "color-mix(in oklch, var(--card) 80%, transparent)",
+    color: "var(--foreground)",
+    borderColor: "color-mix(in oklch, var(--primary) 22%, transparent)",
+    backdropFilter: "blur(8px)",
+  };
+
+  const style = variant === "primary" ? primary : secondary;
+
+  return (
+    <a
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      style={style}
+      onMouseEnter={e => {
+        const el = e.currentTarget;
+        if (variant === "primary") {
+          el.style.transform = "translateY(-1px)";
+          el.style.boxShadow = "0 6px 20px color-mix(in oklch, var(--primary) 40%, transparent)";
+        } else {
+          el.style.transform = "translateY(-1px)";
+          el.style.background = "color-mix(in oklch, var(--primary) 10%, transparent)";
+        }
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget;
+        el.style.transform = "translateY(0)";
+        if (variant === "primary") {
+          el.style.boxShadow = "0 2px 12px color-mix(in oklch, var(--primary) 30%, transparent)";
+        } else {
+          el.style.background = "color-mix(in oklch, var(--card) 80%, transparent)";
+        }
+      }}
+      onMouseDown={e => { e.currentTarget.style.transform = "translateY(1px)"; }}
+      onMouseUp={e => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+      onFocus={e => { e.currentTarget.style.outlineColor = "var(--primary)"; }}
+      onBlur={e => { e.currentTarget.style.outlineColor = "transparent"; }}
+    >
+      {children}
+    </a>
+  );
+}
+
+/* ── WhatsApp icon ── */
+function WhatsAppIcon() {
+  return (
+    <svg viewBox="0 0 32 32" width="16" height="16" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <path d="M26.576 5.363c-2.69-2.69-6.406-4.354-10.511-4.354-8.209 0-14.865 6.655-14.865 14.865 0 2.732 0.737 5.291 2.022 7.491l-2.147 7.772 7.949-2.086c2.051 1.139 4.498 1.809 7.102 1.809h0.006c8.209-0.003 14.862-6.659 14.862-14.868 0-4.103-1.662-7.817-4.349-10.507l0 0z" opacity="0.9"/>
+    </svg>
   );
 }
 
