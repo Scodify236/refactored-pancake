@@ -168,23 +168,27 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
 
   return (
     <div className="relative rounded-[1.25rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col gap-4 hover:border-primary/35 transition-all duration-300 group">
-      {/* 1. Full Image (Viewport/card container controlled height) */}
+      {/* 1. Multiple Images Horizontally (Viewport / Container height controlled to h-[360px]) */}
       {urls.length > 0 && (
-        <div className="relative w-full h-[360px] rounded-xl overflow-hidden border border-border bg-black/30">
-          <button
-            type="button"
-            onClick={() => onZoom(urls, activeIdx)}
-            className="w-full h-full cursor-zoom-in group/img focus:outline-none"
-          >
-            <img
-              src={urls[activeIdx]}
-              alt="Proof Timeline"
-              className="h-full w-full object-contain group-hover/img:scale-[1.02] transition duration-300"
-            />
-            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-              <span className="text-[10px] font-bold text-white bg-black/75 px-3 py-1.5 rounded-full backdrop-blur-sm">Click to Zoom</span>
+        <div className="flex gap-4 overflow-x-auto py-2 scrollbar-thin scrollbar-thumb-border">
+          {urls.map((url, idx) => (
+            <div key={idx} className="relative h-[360px] min-w-[280px] sm:min-w-[480px] rounded-xl overflow-hidden border border-border bg-black/30 shrink-0">
+              <button
+                type="button"
+                onClick={() => onZoom(urls, idx)}
+                className="w-full h-full cursor-zoom-in group/img focus:outline-none"
+              >
+                <img
+                  src={url}
+                  alt={`Proof Timeline ${idx + 1}`}
+                  className="h-full w-full object-contain group-hover/img:scale-[1.02] transition duration-300"
+                />
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-[10px] font-bold text-white bg-black/75 px-3 py-1.5 rounded-full backdrop-blur-sm">Click to Zoom</span>
+                </div>
+              </button>
             </div>
-          </button>
+          ))}
         </div>
       )}
 
@@ -213,24 +217,6 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
           )}
         </div>
       </div>
-
-      {/* 3. Small thumbnail switches to change active image */}
-      {urls.length > 1 && (
-        <div className="flex items-center gap-2 overflow-x-auto py-1">
-          {urls.map((url, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setActiveIdx(i)}
-              className={`relative h-11 w-11 rounded-lg overflow-hidden border transition shrink-0 ${
-                activeIdx === i ? "border-primary ring-1 ring-primary/45" : "border-border hover:border-muted-foreground/50"
-              }`}
-            >
-              <img src={url} alt="thumbnail" className="h-full w-full object-cover" />
-            </button>
-          ))}
-        </div>
-      )}
 
       {/* 4. Testimonial & Admin Verification Note */}
       <div className="flex flex-col gap-2.5 pt-1">
