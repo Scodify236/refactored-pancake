@@ -33,12 +33,12 @@ export function Hero() {
 
           {/* Main Title */}
           <h1 className="mb-4 text-white text-center text-5xl sm:text-7xl font-extrabold tracking-tighter leading-none">
-            Design is Everything
+            Exchange <span className="text-gradient">Gift Cards.</span>
           </h1>
 
           {/* Description */}
-          <p className="text-white/60 px-2 sm:px-6 text-center text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mx-auto">
-            Convert your unused digital vouchers securely. Exchanging Amazon, Flipkart, Roblox, gaming & shopping cards into instant local bank payout or USDT.
+          <p className="text-white/70 px-2 sm:px-6 text-center text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mx-auto font-sans">
+            Redeem Amazon, Flipkart, Roblox, Steam, and popular gaming cards into UPI cash or USDT. Quick verification and secure escrow processing.
           </p>
 
           {/* Accept list pills */}
