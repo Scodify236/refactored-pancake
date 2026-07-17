@@ -14,7 +14,7 @@ export function Marquee() {
         .animate-marquee-local {
           display: flex;
           width: max-content;
-          animation: marqueeAnimation 25s linear infinite;
+          animation: marqueeAnimation 12s linear infinite;
         }
       `}</style>
       <div className="animate-marquee-local gap-12 whitespace-nowrap">
