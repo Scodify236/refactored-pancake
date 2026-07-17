@@ -14,12 +14,15 @@ export function Marquee() {
         .animate-marquee-local {
           display: flex;
           width: max-content;
-          animation: marqueeAnimation 12s linear infinite;
+          animation: marqueeAnimation 18s linear infinite;
+        }
+        .marquee-item {
+          text-shadow: 0 0 8px rgba(240, 203, 135, 0.15);
         }
       `}</style>
       <div className="animate-marquee-local gap-12 whitespace-nowrap">
         {row.map((t, i) => (
-          <div key={i} className="flex items-center gap-12 text-xs sm:text-sm font-bold font-display uppercase tracking-widest text-muted-foreground/50">
+          <div key={i} className="marquee-item flex items-center gap-12 text-xs sm:text-sm font-bold font-display uppercase tracking-widest text-muted-foreground/50">
             <span>{t}</span>
             <span className="text-primary/75">✦</span>
           </div>
