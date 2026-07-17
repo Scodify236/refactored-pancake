@@ -73,7 +73,7 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
 
       {/* 1. Full Image (Viewport/card container controlled height) */}
       {urls.length > 0 && (
-        <div className="relative w-full h-[220px] rounded-xl overflow-hidden border border-border bg-black/30">
+        <div className="relative w-full h-[320px] rounded-xl overflow-hidden border border-border bg-black/30">
           <button
             type="button"
             onClick={() => onZoom(urls, activeIdx)}
@@ -170,7 +170,7 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
     <div className="relative rounded-[1.25rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col gap-4 hover:border-primary/35 transition-all duration-300 group">
       {/* 1. Full Image (Viewport/card container controlled height) */}
       {urls.length > 0 && (
-        <div className="relative w-full h-[240px] rounded-xl overflow-hidden border border-border bg-black/30">
+        <div className="relative w-full h-[360px] rounded-xl overflow-hidden border border-border bg-black/30">
           <button
             type="button"
             onClick={() => onZoom(urls, activeIdx)}
