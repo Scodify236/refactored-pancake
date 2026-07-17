@@ -70,6 +70,11 @@ export function Hero() {
         }
         .hero-orb-1 { animation: orb1 20s ease-in-out infinite; }
         .hero-orb-2 { animation: orb2 24s ease-in-out infinite; }
+        @keyframes heroMarquee {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .hero-marquee-track { animation: heroMarquee 18s linear infinite; }
         .hero-orb-3 { animation: orb3 18s ease-in-out infinite; }
         .hero-spark { animation: floatSparks 8s ease-in-out infinite; }
         .hero-aura-beam {
@@ -134,16 +139,16 @@ export function Hero() {
           Convert your unused digital vouchers securely. Exchanging Amazon, Flipkart, Roblox, gaming & shopping cards into instant local bank payout or USDT.
         </p>
 
-        {/* Enhanced Visual Card Grid */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 mt-8 max-w-xl px-4 pointer-events-auto">
-          {["Amazon", "Flipkart", "Roblox", "Overwatch 2", "League of Legends", "Sea of Thieves"].map((card) => (
-            <span
-              key={card}
-              className="text-[10px] font-bold tracking-tight px-4 py-2 rounded-xl bg-card/40 border border-border/40 text-foreground/85 shadow-sm hover:border-primary/50 hover:bg-card/85 transition-all duration-300 hover:scale-105 cursor-default"
-            >
-              {card}
-            </span>
-          ))}
+        {/* Moving ticker strip */}
+        <div className="relative w-full overflow-hidden mt-8 pointer-events-none" style={{ maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)" }}>
+          <div className="hero-marquee-track flex items-center gap-8 w-max">
+            {["ROBLOX","OVERWATCH 2","SEA OF THIEVES","LEAGUE OF LEGENDS","INR","USDT","AMAZON","FLIPKART","INSTANT PAYOUT","ROBLOX","OVERWATCH 2","SEA OF THIEVES","LEAGUE OF LEGENDS","INR","USDT","AMAZON","FLIPKART","INSTANT PAYOUT"].map((item, i) => (
+              <div key={i} className="flex items-center gap-8 shrink-0">
+                <span className="text-[11px] font-bold font-mono uppercase tracking-[0.18em] text-muted-foreground/55">{item}</span>
+                <span className="text-primary/50 text-xs">✦</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
