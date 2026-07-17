@@ -21,6 +21,8 @@ const config = {
       queue: "dummy",
     },
   },
+  // Break recursion loop by telling OpenNext to use next build directly
+  buildCommand: "npx next build",
 };
 
 export default config;
