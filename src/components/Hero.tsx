@@ -122,11 +122,6 @@ export function Hero() {
 
       {/* ── Header ── */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center order-1 mt-24 sm:mt-0 pointer-events-none w-full">
-        {/* Brand Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-foreground/[0.03] border border-border/80 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-6 shadow-sm select-none">
-          <Zap size={11} className="text-primary fill-primary/10 animate-pulse" />
-          <span>Instant Settlement Platform</span>
-        </div>
         <h1 className="hero-title flex flex-row items-center justify-center gap-2.5 sm:gap-4 lg:gap-6 px-1 py-2 w-full flex-wrap text-[3.2rem] xs:text-[3.6rem] sm:text-7xl md:text-8xl lg:text-9xl leading-[1.02]">
           <span className="font-serif italic font-medium">Exchange</span>
           <span className="font-sans font-extrabold tracking-tighter">Gift Cards.</span>
@@ -190,11 +185,11 @@ export function Hero() {
         {/* Fine Trust details */}
         <div className="flex items-center gap-4 text-[10px] text-muted-foreground/60 font-sans font-medium tracking-wide">
           <span className="flex items-center gap-1">
-            <Zap size={11} className="text-emerald-400" /> Instant Settlement
+            <ShieldCheck size={11} className="text-emerald-400" /> Admin Verified
           </span>
           <span className="h-1 w-1 rounded-full bg-border" />
           <span className="flex items-center gap-1">
-            <ShieldCheck size={11} className="text-emerald-400" /> Admin Verified
+            <Zap size={11} className="text-emerald-400" /> Secure Escrow
           </span>
         </div>
       </div>
