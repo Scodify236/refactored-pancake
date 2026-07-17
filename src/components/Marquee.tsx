@@ -1,6 +1,6 @@
 import * as React from "react"
 
-const items = ["AMAZON", "FLIPKART", "ROBLOX", "OVERWATCH 2", "SEA OF THIEVES", "LEAGUE OF LEGENDS", "INR", "CRYPTO", "UPI", "USDT TRC20", "USDT ERC20", "INSTANT PAYOUT", "24/7 SUPPORT"]
+const items = ["ROBLOX", "OVERWATCH 2", "SEA OF THIEVES", "LEAGUE OF LEGENDS", "INR", "AMAZON", "FLIPKART", "USDT", "CRYPTO", "UPI", "INSTANT PAYOUT"]
 
 export function Marquee() {
   const row = [...items, ...items]
