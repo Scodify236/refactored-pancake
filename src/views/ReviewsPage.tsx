@@ -109,20 +109,20 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
       {urls.length > 0 && (
         <div className="flex flex-col gap-3 mt-1">
           {urls.map((url, i) => (
-            <div key={i} className="flex flex-col gap-2">
+            <div key={i} className="flex flex-row items-center gap-3">
               <button
                 type="button"
                 onClick={() => onZoom(urls, i)}
-                className="relative w-full h-[160px] rounded-xl overflow-hidden border border-border bg-black/20 shadow-sm cursor-zoom-in group/img focus:outline-none"
+                className="relative w-28 h-20 shrink-0 rounded-xl overflow-hidden border border-border bg-black/20 shadow-sm cursor-zoom-in group/img focus:outline-none"
               >
                 <img src={url} alt="Proof receipt" className="h-full w-full object-cover group-hover/img:scale-105 transition duration-300" />
-                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="text-[10px] font-bold text-white bg-black/75 px-3 py-1.5 rounded-full backdrop-blur-sm">Click to Zoom</span>
+                <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-[8px] font-bold text-white bg-black/75 px-2 py-1 rounded-full backdrop-blur-sm">Zoom</span>
                 </div>
               </button>
 
-              {/* Admin Complement note under image */}
-              <div className="p-2.5 rounded-xl bg-foreground/[0.01] border border-border/80 text-left">
+              {/* Admin Complement note next to image */}
+              <div className="flex-1 p-2 rounded-xl bg-foreground/[0.01] border border-border/80 text-left min-h-[5rem] flex flex-col justify-center">
                 <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">Admin Verification Note</span>
                 <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium">
                   "Trade successfully completed. Digital voucher of {proof.trade_type} received and payout processed securely under verified transaction protocol."
@@ -195,20 +195,20 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
       {urls.length > 0 && (
         <div className="flex flex-col gap-3 mt-2 pt-2 border-t border-border/20">
           {urls.map((url, i) => (
-            <div key={i} className="flex flex-col gap-2">
+            <div key={i} className="flex flex-row items-center gap-3">
               <button
                 type="button"
                 onClick={() => onZoom(urls, i)}
-                className="relative w-full h-[180px] rounded-xl overflow-hidden border border-border bg-black/20 shadow-sm cursor-zoom-in group/img focus:outline-none"
+                className="relative w-36 h-24 shrink-0 rounded-xl overflow-hidden border border-border bg-black/20 shadow-sm cursor-zoom-in group/img focus:outline-none"
               >
                 <img src={url} alt="Proof" className="h-full w-full object-cover group-hover/img:scale-105 transition duration-300" />
                 <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="text-[10px] font-bold text-white bg-black/75 px-3 py-1.5 rounded-full backdrop-blur-sm">Click to Zoom</span>
+                  <span className="text-[8px] font-bold text-white bg-black/75 px-2 py-1 rounded-full backdrop-blur-sm">Zoom</span>
                 </div>
               </button>
 
-              {/* Admin Complement note under image */}
-              <div className="p-2.5 rounded-xl bg-foreground/[0.01] border border-border/80 text-left">
+              {/* Admin Complement note next to image */}
+              <div className="flex-1 p-2.5 rounded-xl bg-foreground/[0.01] border border-border/80 text-left min-h-[6rem] flex flex-col justify-center">
                 <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">Admin Verification Note</span>
                 <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium">
                   "Trade successfully completed. Digital voucher of {proof.trade_type} received and payout processed securely under verified transaction protocol."
