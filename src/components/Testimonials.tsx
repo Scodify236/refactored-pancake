@@ -16,15 +16,7 @@ interface Proof {
   created_at?: string
 }
 
-const STATIC_DAILY_PAYOUTS = [
-  { id: 1, date: "2026-07-17", amount: "₹14,500", cardType: "Amazon", method: "UPI", status: "Settled" },
-  { id: 2, date: "2026-07-16", amount: "₹8,200", cardType: "Flipkart", method: "UPI", status: "Settled" },
-  { id: 3, date: "2026-07-15", amount: "$180 USDT", cardType: "Roblox", method: "USDT TRC20", status: "Settled" },
-  { id: 4, date: "2026-07-14", amount: "₹22,000", cardType: "Amazon", method: "UPI", status: "Settled" },
-  { id: 5, date: "2026-07-13", amount: "$95 USDT", cardType: "League of Legends", method: "USDT ERC20", status: "Settled" },
-  { id: 6, date: "2026-07-12", amount: "₹6,700", cardType: "Steam", method: "UPI", status: "Settled" },
-  { id: 7, date: "2026-07-11", amount: "₹31,000", cardType: "Amazon", method: "UPI", status: "Settled" },
-]
+const STATIC_DAILY_PAYOUTS: any[] = []
 
 function formatDate(dateStr: string | null | undefined) {
   if (!dateStr) return ""
