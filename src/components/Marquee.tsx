@@ -14,7 +14,7 @@ export function Marquee() {
         .animate-marquee-local {
           display: flex;
           width: max-content;
-          animation: marqueeAnimation 18s linear infinite;
+          animation: marqueeAnimation 24s linear infinite;
         }
         .marquee-item {
           text-shadow: 0 0 8px rgba(240, 203, 135, 0.15);
