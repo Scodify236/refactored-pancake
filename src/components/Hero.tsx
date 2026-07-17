@@ -47,41 +47,73 @@ export function Hero() {
 
         /* Animated gradient orbs */
         @keyframes orb1 {
-          0%, 100% { transform: translate(0, 0) scale(1); filter: blur(80px); }
-          33%       { transform: translate(50px, -40px) scale(1.1); filter: blur(100px); }
-          66%       { transform: translate(-40px, 30px) scale(0.95); filter: blur(90px); }
+          0%, 100% { transform: translate(0, 0) scale(1); filter: blur(100px); }
+          33%       { transform: translate(70px, -50px) scale(1.15); filter: blur(120px); }
+          66%       { transform: translate(-60px, 40px) scale(0.9); filter: blur(110px); }
         }
         @keyframes orb2 {
-          0%, 100% { transform: translate(0, 0) scale(1); filter: blur(70px); }
-          40%       { transform: translate(-60px, 40px) scale(1.15); filter: blur(90px); }
-          70%       { transform: translate(40px, -30px) scale(0.9); filter: blur(80px); }
+          0%, 100% { transform: translate(0, 0) scale(1); filter: blur(90px); }
+          40%       { transform: translate(-80px, 60px) scale(1.2); filter: blur(110px); }
+          70%       { transform: translate(60px, -45px) scale(0.85); filter: blur(100px); }
         }
         @keyframes orb3 {
-          0%, 100% { transform: translate(0, 0) scale(1); filter: blur(60px); }
-          50%       { transform: translate(30px, 50px) scale(1.08); filter: blur(80px); }
+          0%, 100% { transform: translate(0, 0) scale(1); filter: blur(80px); }
+          50%       { transform: translate(45px, 70px) scale(1.1); filter: blur(100px); }
         }
-        .hero-orb-1 { animation: orb1 16s ease-in-out infinite; }
-        .hero-orb-2 { animation: orb2 20s ease-in-out infinite; }
-        .hero-orb-3 { animation: orb3 14s ease-in-out infinite; }
+        @keyframes floatSparks {
+          0%, 100% { transform: translateY(0) translateX(0) scale(0.8); opacity: 0.2; }
+          50% { transform: translateY(-40px) translateX(20px) scale(1.2); opacity: 0.8; }
+        }
+        @keyframes rotateAura {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .hero-orb-1 { animation: orb1 20s ease-in-out infinite; }
+        .hero-orb-2 { animation: orb2 24s ease-in-out infinite; }
+        .hero-orb-3 { animation: orb3 18s ease-in-out infinite; }
+        .hero-spark { animation: floatSparks 8s ease-in-out infinite; }
+        .hero-aura-beam {
+          animation: rotateAura 60s linear infinite;
+          transform-origin: center;
+        }
       `}</style>
 
       {/* ── Background Layer ── */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Rotating ambient aura beams */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-[0.06] dark:opacity-[0.04]">
+          <div 
+            className="hero-aura-beam w-[120vw] h-[120vw] rounded-full"
+            style={{
+              background: "conic-gradient(from 0deg, transparent, oklch(0.82 0.18 85), transparent 30%, oklch(0.7 0.18 165), transparent 70%, oklch(0.6 0.22 265), transparent)"
+            }}
+          />
+        </div>
+
         {/* Ambient gold/amber glow */}
         <div
-          className="hero-orb-1 absolute -top-56 left-1/2 -translate-x-1/2 w-[850px] h-[550px] rounded-full opacity-[0.16] dark:opacity-[0.11]"
+          className="hero-orb-1 absolute -top-56 left-1/2 -translate-x-1/2 w-[850px] h-[550px] rounded-full opacity-[0.18] dark:opacity-[0.13]"
           style={{ background: "radial-gradient(circle, oklch(0.82 0.18 85) 0%, transparent 70%)" }}
         />
         {/* Soft violet depth orb */}
         <div
-          className="hero-orb-2 absolute -bottom-36 -left-36 w-[650px] h-[500px] rounded-full opacity-[0.09] dark:opacity-[0.07]"
+          className="hero-orb-2 absolute -bottom-36 -left-36 w-[650px] h-[500px] rounded-full opacity-[0.11] dark:opacity-[0.08]"
           style={{ background: "radial-gradient(circle, oklch(0.6 0.22 265) 0%, transparent 70%)" }}
         />
         {/* Soft cyan balance orb */}
         <div
-          className="hero-orb-3 absolute top-1/4 -right-24 w-[550px] h-[450px] rounded-full opacity-[0.08] dark:opacity-[0.06]"
+          className="hero-orb-3 absolute top-1/4 -right-24 w-[550px] h-[450px] rounded-full opacity-[0.1] dark:opacity-[0.07]"
           style={{ background: "radial-gradient(circle, oklch(0.7 0.18 165) 0%, transparent 70%)" }}
         />
+
+        {/* Floating background spark elements */}
+        <div className="absolute inset-0 z-1">
+          <div className="hero-spark absolute top-[25%] left-[20%] w-1.5 h-1.5 rounded-full bg-primary/40 blur-[1px]" style={{ animationDelay: "0s" }} />
+          <div className="hero-spark absolute top-[40%] right-[25%] w-2 h-2 rounded-full bg-primary/30 blur-[1px]" style={{ animationDelay: "2s" }} />
+          <div className="hero-spark absolute bottom-[30%] left-[35%] w-1 h-1 rounded-full bg-cyan-400/40" style={{ animationDelay: "4s" }} />
+          <div className="hero-spark absolute top-[60%] left-[15%] w-2.5 h-2.5 rounded-full bg-rose-400/20 blur-[2px]" style={{ animationDelay: "1s" }} />
+          <div className="hero-spark absolute bottom-[20%] right-[15%] w-1.5 h-1.5 rounded-full bg-primary/40 blur-[1px]" style={{ animationDelay: "3s" }} />
+        </div>
 
         {/* Dynamic vignette filters */}
         <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-background via-background/40 to-transparent" />
