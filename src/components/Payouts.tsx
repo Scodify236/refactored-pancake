@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Link } from "./router"
-import { Smartphone, Shield, Gift, Upload, CheckCircle } from "lucide-react"
+import { Smartphone, Shield, Gift, Upload, CheckCircle, Loader2 } from "lucide-react"
 
 const PAYOUTS_DATA = [
   {
@@ -26,13 +26,30 @@ const PAYOUTS_DATA = [
   },
 ]
 
-const STATIC_PAYOUTS = [
-  { id: 1, submission_date: "2026-05-08T00:00:00.000Z", payout_date: "2026-05-15T00:00:00.000Z", amount: "N/A", card_type: "All Cards", method: "Any", status: "Submission Closed" },
-  { id: 2, submission_date: "2026-05-16T00:00:00.000Z", payout_date: "2026-05-23T00:00:00.000Z", amount: "N/A", card_type: "All Cards", method: "Any", status: "Submission Closed" },
-  { id: 3, submission_date: "2026-06-08T00:00:00.000Z", payout_date: "2026-06-15T00:00:00.000Z", amount: "N/A", card_type: "All Cards", method: "Any", status: "Submission Open" },
-]
+interface PayoutRun {
+  id: string | number
+  submission_date: string
+  payout_date: string
+  amount: string
+  card_type: string
+  method: string
+  status: string
+}
 
 export function Payouts() {
+  const [payouts, setPayouts] = React.useState<PayoutRun[]>([])
+  const [loading, setLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    fetch("https://api.gcx.co.in/api/payouts")
+      .then(r => r.json())
+      .then((data: PayoutRun[]) => {
+        setPayouts(Array.isArray(data) ? data : [])
+      })
+      .catch(() => setPayouts([]))
+      .finally(() => setLoading(false))
+  }, [])
+
   return (
     <section id="payouts" className="relative py-10 sm:py-14 border-t border-border/40 overflow-hidden bg-background">
       <div className="absolute inset-0 grid-bg pointer-events-none opacity-30" />
@@ -95,72 +112,83 @@ export function Payouts() {
           </div>
 
           <div className="space-y-6">
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              {STATIC_PAYOUTS.map((p, idx) => {
-                const sub = new Date(p.submission_date)
-                const pay = new Date(p.payout_date)
-                const diffDays = Math.ceil(Math.abs(pay.getTime() - sub.getTime()) / (1000 * 60 * 60 * 24))
-                const isSettled = pay <= new Date()
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-16 gap-3">
+                <Loader2 className="animate-spin text-primary h-7 w-7" />
+                <span className="text-xs text-muted-foreground font-mono">Loading schedule...</span>
+              </div>
+            ) : payouts.length === 0 ? (
+              <div className="text-center py-16 text-muted-foreground text-sm font-mono">
+                No payout runs scheduled yet.
+              </div>
+            ) : (
+              <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {payouts.map((p, idx) => {
+                  const sub = new Date(p.submission_date)
+                  const pay = new Date(p.payout_date)
+                  const diffDays = Math.ceil(Math.abs(pay.getTime() - sub.getTime()) / (1000 * 60 * 60 * 24))
+                  const isSettled = pay <= new Date()
 
-                return (
-                  <div key={p.id} className="relative overflow-hidden liquid-glass rounded-[2rem] p-6 border border-border/50 hover:border-border/80 hover:bg-foreground/[0.01] transition-all duration-300 flex flex-col justify-between bg-background">
-                    <div className="flex justify-between items-center mb-5">
-                      <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-muted-foreground bg-foreground/[0.02] border border-border/60 rounded-full px-3 py-1">
-                        Run #{idx + 1}
-                      </span>
-                      {isSettled ? (
-                        <span className="text-[9.5px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1 flex items-center gap-1 shadow-sm font-sans">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          Settled &amp; Disbursed
+                  return (
+                    <div key={p.id} className="relative overflow-hidden liquid-glass rounded-[2rem] p-6 border border-border/50 hover:border-border/80 hover:bg-foreground/[0.01] transition-all duration-300 flex flex-col justify-between bg-background">
+                      <div className="flex justify-between items-center mb-5">
+                        <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-muted-foreground bg-foreground/[0.02] border border-border/60 rounded-full px-3 py-1">
+                          Run #{idx + 1}
                         </span>
-                      ) : (
-                        <span className="text-[9.5px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1 flex items-center gap-1 shadow-sm font-sans">
-                          <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-                          Processing Run
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="relative flex items-center justify-between my-5 px-1">
-                      <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-[1px] pointer-events-none z-0">
-                        <div className={`h-full w-full ${isSettled ? "border-t border-emerald-500/30" : "border-t border-dashed border-border/80"}`} />
+                        {isSettled ? (
+                          <span className="text-[9.5px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1 flex items-center gap-1 shadow-sm font-sans">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            Settled &amp; Disbursed
+                          </span>
+                        ) : (
+                          <span className="text-[9.5px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1 flex items-center gap-1 shadow-sm font-sans">
+                            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                            Processing Run
+                          </span>
+                        )}
                       </div>
 
-                      <div className="relative z-10 flex flex-col items-center select-none">
-                        <div className={`h-9 w-9 rounded-full flex items-center justify-center border shadow-md transition duration-300 ${isSettled ? "bg-emerald-950/80 border-emerald-500 text-emerald-400" : "bg-secondary border-border text-muted-foreground"}`}>
-                          <Upload size={13} className="stroke-[2.5]" />
+                      <div className="relative flex items-center justify-between my-5 px-1">
+                        <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-[1px] pointer-events-none z-0">
+                          <div className={`h-full w-full ${isSettled ? "border-t border-emerald-500/30" : "border-t border-dashed border-border/80"}`} />
                         </div>
-                        <span className="text-[8px] font-sans font-bold text-muted-foreground mt-2 uppercase tracking-wider">Submitted</span>
-                        <span className="text-[10px] font-bold text-foreground mt-0.5">
-                          {sub.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
-                        </span>
-                      </div>
 
-                      <div className="relative z-20 px-2.5 py-0.5 rounded-full bg-background border border-border/80 text-[7.5px] font-bold text-primary uppercase tracking-wider shadow-sm font-sans">
-                        ⚡ {diffDays}d Run
-                      </div>
-
-                      <div className="relative z-10 flex flex-col items-center select-none">
-                        <div className={`h-9 w-9 rounded-full flex items-center justify-center border shadow-md transition duration-300 ${isSettled ? "bg-emerald-950/80 border-emerald-500 text-emerald-400" : "bg-secondary border-border text-muted-foreground"}`}>
-                          <CheckCircle size={13} className="stroke-[2.5]" />
+                        <div className="relative z-10 flex flex-col items-center select-none">
+                          <div className={`h-9 w-9 rounded-full flex items-center justify-center border shadow-md transition duration-300 ${isSettled ? "bg-emerald-950/80 border-emerald-500 text-emerald-400" : "bg-secondary border-border text-muted-foreground"}`}>
+                            <Upload size={13} className="stroke-[2.5]" />
+                          </div>
+                          <span className="text-[8px] font-sans font-bold text-muted-foreground mt-2 uppercase tracking-wider">Submitted</span>
+                          <span className="text-[10px] font-bold text-foreground mt-0.5">
+                            {sub.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                          </span>
                         </div>
-                        <span className="text-[8px] font-sans font-bold text-muted-foreground mt-2 uppercase tracking-wider">Disbursed</span>
-                        <span className="text-[10px] font-bold text-foreground mt-0.5">
-                          {pay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+
+                        <div className="relative z-20 px-2.5 py-0.5 rounded-full bg-background border border-border/80 text-[7.5px] font-bold text-primary uppercase tracking-wider shadow-sm font-sans">
+                          ⚡ {diffDays}d Run
+                        </div>
+
+                        <div className="relative z-10 flex flex-col items-center select-none">
+                          <div className={`h-9 w-9 rounded-full flex items-center justify-center border shadow-md transition duration-300 ${isSettled ? "bg-emerald-950/80 border-emerald-500 text-emerald-400" : "bg-secondary border-border text-muted-foreground"}`}>
+                            <CheckCircle size={13} className="stroke-[2.5]" />
+                          </div>
+                          <span className="text-[8px] font-sans font-bold text-muted-foreground mt-2 uppercase tracking-wider">Disbursed</span>
+                          <span className="text-[10px] font-bold text-foreground mt-0.5">
+                            {pay.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="border-t border-border/30 pt-3 flex justify-between items-center text-[9px] text-muted-foreground font-sans">
+                        <span>Timeline Cycle:</span>
+                        <span className="font-semibold text-foreground">
+                          {isSettled ? "100% Disbursed on Schedule" : "Settlement Pending"}
                         </span>
                       </div>
                     </div>
-
-                    <div className="border-t border-border/30 pt-3 flex justify-between items-center text-[9px] text-muted-foreground font-sans">
-                      <span>Timeline Cycle:</span>
-                      <span className="font-semibold text-foreground">
-                        {isSettled ? "100% Disbursed on Schedule" : "Settlement Pending"}
-                      </span>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
+            )}
 
             {/* WHATSAPP BANNER */}
             <div className="pt-8 text-center">
