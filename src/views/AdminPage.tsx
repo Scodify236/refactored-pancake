@@ -94,6 +94,7 @@ interface Review {
   gc_received_date: string
   payment_sent_date: string
   created_at?: string
+  admin_notes?: string | null
 }
 
 interface Appeal {
@@ -215,6 +216,7 @@ export function AdminPage() {
   const [adminNewProofUrl, setAdminNewProofUrl] = React.useState("")
   const [adminNewUploading, setAdminNewUploading] = React.useState(false)
   const [adminNewAmount, setAdminNewAmount] = React.useState<number>(0)
+  const [adminNewAdminNotes, setAdminNewAdminNotes] = React.useState("")
 
   // Edit Review Form States
   const [editingReviewId, setEditingReviewId] = React.useState<string | number | null>(null)
@@ -230,6 +232,7 @@ export function AdminPage() {
   const [editingReviewProofUrl, setEditingReviewProofUrl] = React.useState("")
   const [editingReviewUploading, setEditingReviewUploading] = React.useState(false)
   const [editingReviewAmount, setEditingReviewAmount] = React.useState<number>(0)
+  const [editingReviewAdminNotes, setEditingReviewAdminNotes] = React.useState("")
 
   // Appeals state
   const [appeals, setAppeals] = React.useState<Appeal[]>([])
@@ -701,7 +704,8 @@ export function AdminPage() {
           gc_received_date: adminNewGcReceivedDate || null,
           payment_sent_date: adminNewPaymentSentDate || null,
           amount: adminNewAmount || 0,
-          amount_label: computedLabel
+          amount_label: computedLabel,
+          admin_notes: adminNewAdminNotes || null
         })
       })
       if (res.ok) {
@@ -745,7 +749,8 @@ export function AdminPage() {
           proof_image_url: editingReviewProofUrl,
           region: editingReviewRegion || null,
           gc_received_date: editingReviewGcReceivedDate || null,
-          payment_sent_date: editingReviewPaymentSentDate || null
+          payment_sent_date: editingReviewPaymentSentDate || null,
+          admin_notes: editingReviewAdminNotes || null
         })
       })
       if (res.ok) {
@@ -1849,13 +1854,24 @@ export function AdminPage() {
                       </div>
 
                       <div className="grid gap-2">
+                        <Label htmlFor="adminNotes" className="text-[10px] font-mono font-bold uppercase text-muted-foreground">Admin Verification Note</Label>
+                        <Textarea
+                          id="adminNotes"
+                          value={adminNewAdminNotes}
+                          onChange={(e) => setAdminNewAdminNotes(e.target.value)}
+                          placeholder="e.g. Voucher confirmed and payout completed..."
+                          rows={2}
+                        />
+                      </div>
+
+                      <div className="grid gap-2">
                         <Label className="text-[10px] font-mono font-bold uppercase text-muted-foreground">Proof Receipt Image *</Label>
                         <div className="relative border-2 border-dashed border-border/80 rounded-2xl p-4 flex flex-col items-center justify-center bg-foreground/[0.01] hover:bg-foreground/[0.02] hover:border-primary/45 transition duration-300 group overflow-hidden">
                           <input
                             type="file"
                             accept="image/*"
                             onChange={(e) => handleAdminImageUpload(e, false)}
-                            className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30"
                             disabled={adminNewUploading}
                           />
                           {adminNewUploading ? (
@@ -2098,6 +2114,16 @@ export function AdminPage() {
                                   value={editingReviewQuote}
                                   onChange={(e) => setEditingReviewQuote(e.target.value)}
                                   rows={3}
+                                />
+                              </div>
+
+                              <div className="grid gap-2">
+                                <Label className="text-[9px] font-mono text-muted-foreground">Admin Verification Note</Label>
+                                <Textarea
+                                  value={editingReviewAdminNotes}
+                                  onChange={(e) => setEditingReviewAdminNotes(e.target.value)}
+                                  placeholder="e.g. Voucher confirmed and payout completed..."
+                                  rows={2}
                                 />
                               </div>
 
