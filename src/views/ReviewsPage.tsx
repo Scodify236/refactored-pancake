@@ -107,33 +107,21 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
 
       {/* Proof images */}
       {urls.length > 0 && (
-        <button
-          type="button"
-          onClick={() => onZoom(urls, 0)}
-          className="w-full flex items-center gap-4 p-2.5 rounded-xl border transition-all duration-300 group/btn cursor-pointer text-left focus:outline-none bg-foreground/[0.01] border-border/60 hover:border-primary/40 hover:bg-primary/[0.03]"
-        >
-          <div className="flex gap-2 shrink-0">
-            {urls.slice(0, 3).map((url, i) => (
-              <div key={i} className="relative h-20 w-20 rounded-lg overflow-hidden border border-border bg-black/30 shadow-md">
-                <img src={url} alt="Proof receipt" className="h-full w-full object-cover group-hover/btn:scale-105 transition duration-300" />
+        <div className="flex flex-col gap-2 mt-1">
+          {urls.map((url, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => onZoom(urls, i)}
+              className="relative w-full rounded-xl overflow-hidden border border-border bg-black/30 shadow-sm cursor-zoom-in group/img focus:outline-none aspect-[4/3] sm:aspect-video"
+            >
+              <img src={url} alt="Proof receipt" className="h-full w-full object-contain group-hover/img:scale-[1.02] transition duration-300" />
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                <span className="text-[10px] font-bold text-white bg-black/60 px-3 py-1.5 rounded-full backdrop-blur-sm">Click to Zoom</span>
               </div>
-            ))}
-            {urls.length > 3 && (
-              <div className="h-20 w-20 rounded-lg border border-border/60 bg-foreground/[0.04] flex items-center justify-center text-[10px] font-bold text-muted-foreground">
-                +{urls.length - 3}
-              </div>
-            )}
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5 mb-1">
-              <CheckCircle size={10} className="text-primary" />
-              <span className="text-[9px] font-bold text-primary uppercase tracking-wide">Verified Receipt</span>
-            </div>
-            <span className="text-[10px] font-bold text-foreground">
-              {urls.length} image{urls.length > 1 ? "s" : ""} — click to view
-            </span>
-          </div>
-        </button>
+            </button>
+          ))}
+        </div>
       )}
 
       {/* Footer — no avatar, no stars */}
@@ -154,57 +142,64 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
   const urls = proof.proof_image_url ? proof.proof_image_url.split(",").map(u => u.trim()).filter(Boolean) : []
 
   return (
-    <div className="relative rounded-[1.25rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col sm:flex-row gap-4 hover:border-primary/35 transition-all duration-300 group">
-      {/* Left: metadata column */}
-      <div className="sm:w-48 shrink-0 flex flex-col gap-2">
-        {proof.amount_label && (
-          <span className="text-[8.5px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1 w-fit">
-            {proof.amount_label}
+    <div className="relative rounded-[1.25rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col gap-4 hover:border-primary/35 transition-all duration-300 group">
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Left/Top: metadata */}
+        <div className="sm:w-48 shrink-0 flex flex-col gap-2">
+          {proof.amount_label && (
+            <span className="text-[8.5px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1 w-fit">
+              {proof.amount_label}
+            </span>
+          )}
+          <span className="text-[8.5px] font-bold rounded-full px-2.5 py-1 border text-primary bg-primary/10 border-primary/20 uppercase tracking-wider w-fit">
+            {proof.trade_type}
           </span>
-        )}
-        <span className="text-[8.5px] font-bold rounded-full px-2.5 py-1 border text-primary bg-primary/10 border-primary/20 uppercase tracking-wider w-fit">
-          {proof.trade_type}
-        </span>
-        {proof.payment_sent_date && (
-          <div className="mt-1">
-            <span className="text-[8px] text-muted-foreground uppercase tracking-wide block font-bold">Paid Out</span>
-            <span className="text-[10px] font-bold text-foreground">{formatDate(proof.payment_sent_date)}</span>
+          {proof.payment_sent_date && (
+            <div className="mt-1">
+              <span className="text-[8px] text-muted-foreground uppercase tracking-wide block font-bold">Paid Out</span>
+              <span className="text-[10px] font-bold text-foreground">{formatDate(proof.payment_sent_date)}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Right/Bottom: content */}
+        <div className="flex-1 flex flex-col justify-between gap-2">
+          <div className="flex gap-2">
+            <Quote size={12} className="text-primary/20 shrink-0 mt-0.5" />
+            <p className="text-[11.5px] leading-relaxed text-muted-foreground font-medium line-clamp-3">
+              {proof.quote}
+            </p>
           </div>
-        )}
-        {urls.length > 0 && (
-          <button type="button" onClick={() => onZoom(urls, 0)} className="flex gap-1.5 mt-2 cursor-pointer group/imgs">
-            {urls.slice(0, 2).map((url, i) => (
-              <div key={i} className="h-16 w-16 rounded-lg overflow-hidden border border-border bg-black/30 shadow-sm group-hover/imgs:border-primary/40 transition">
-                <img src={url} alt="Proof" className="h-full w-full object-cover" />
-              </div>
-            ))}
-            {urls.length > 2 && (
-              <div className="h-16 w-16 rounded-lg border border-border/60 bg-foreground/[0.04] flex items-center justify-center text-[10px] font-bold text-muted-foreground">
-                +{urls.length - 2}
-              </div>
-            )}
-          </button>
-        )}
+          <div className="flex items-center justify-between pt-2 border-t border-border/30">
+            <div>
+              <p className="text-[11px] font-bold text-foreground">{proof.name}</p>
+              <p className="text-[9px] text-muted-foreground">{proof.role}</p>
+            </div>
+            <span className="text-[7.5px] font-bold text-emerald-400 flex items-center gap-1 uppercase">
+              <CheckCircle size={8} className="fill-emerald-400/20" /> Admin Verified
+            </span>
+          </div>
+        </div>
       </div>
 
-      {/* Right: content */}
-      <div className="flex-1 flex flex-col justify-between gap-2">
-        <div className="flex gap-2">
-          <Quote size={12} className="text-primary/20 shrink-0 mt-0.5" />
-          <p className="text-[11.5px] leading-relaxed text-muted-foreground font-medium line-clamp-3">
-            {proof.quote}
-          </p>
+      {/* Full-width images at bottom of timeline row */}
+      {urls.length > 0 && (
+        <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-border/20">
+          {urls.map((url, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => onZoom(urls, i)}
+              className="relative w-full rounded-xl overflow-hidden border border-border bg-black/30 shadow-sm cursor-zoom-in group/img focus:outline-none aspect-[4/3] sm:aspect-video"
+            >
+              <img src={url} alt="Proof" className="h-full w-full object-contain group-hover/img:scale-[1.02] transition duration-300" />
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                <span className="text-[10px] font-bold text-white bg-black/60 px-3 py-1.5 rounded-full backdrop-blur-sm">Click to Zoom</span>
+              </div>
+            </button>
+          ))}
         </div>
-        <div className="flex items-center justify-between pt-2 border-t border-border/30">
-          <div>
-            <p className="text-[11px] font-bold text-foreground">{proof.name}</p>
-            <p className="text-[9px] text-muted-foreground">{proof.role}</p>
-          </div>
-          <span className="text-[7.5px] font-bold text-emerald-400 flex items-center gap-1 uppercase">
-            <CheckCircle size={8} className="fill-emerald-400/20" /> Admin Verified
-          </span>
-        </div>
-      </div>
+      )}
     </div>
   )
 }
