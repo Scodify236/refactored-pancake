@@ -110,26 +110,26 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
         <button
           type="button"
           onClick={() => onZoom(urls, 0)}
-          className="w-full flex items-center gap-3 p-2 rounded-xl border transition-all duration-300 group/btn cursor-pointer text-left focus:outline-none bg-foreground/[0.01] border-border/60 hover:border-primary/40 hover:bg-primary/[0.03]"
+          className="w-full flex items-center gap-4 p-2.5 rounded-xl border transition-all duration-300 group/btn cursor-pointer text-left focus:outline-none bg-foreground/[0.01] border-border/60 hover:border-primary/40 hover:bg-primary/[0.03]"
         >
-          <div className="flex gap-1 shrink-0">
+          <div className="flex gap-2 shrink-0">
             {urls.slice(0, 3).map((url, i) => (
-              <div key={i} className="relative h-9 w-9 rounded-lg overflow-hidden border border-border bg-black/30 shadow-sm">
+              <div key={i} className="relative h-20 w-20 rounded-lg overflow-hidden border border-border bg-black/30 shadow-md">
                 <img src={url} alt="Proof receipt" className="h-full w-full object-cover group-hover/btn:scale-105 transition duration-300" />
               </div>
             ))}
             {urls.length > 3 && (
-              <div className="h-9 w-9 rounded-lg border border-border/60 bg-foreground/[0.04] flex items-center justify-center text-[8px] font-bold text-muted-foreground">
+              <div className="h-20 w-20 rounded-lg border border-border/60 bg-foreground/[0.04] flex items-center justify-center text-[10px] font-bold text-muted-foreground">
                 +{urls.length - 3}
               </div>
             )}
           </div>
           <div>
-            <div className="flex items-center gap-1 mb-0.5">
-              <CheckCircle size={8} className="text-primary" />
-              <span className="text-[8px] font-bold text-primary uppercase tracking-wide">Verified Receipt</span>
+            <div className="flex items-center gap-1.5 mb-1">
+              <CheckCircle size={10} className="text-primary" />
+              <span className="text-[9px] font-bold text-primary uppercase tracking-wide">Verified Receipt</span>
             </div>
-            <span className="text-[9px] font-bold text-foreground">
+            <span className="text-[10px] font-bold text-foreground">
               {urls.length} image{urls.length > 1 ? "s" : ""} — click to view
             </span>
           </div>
@@ -172,14 +172,14 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
           </div>
         )}
         {urls.length > 0 && (
-          <button type="button" onClick={() => onZoom(urls, 0)} className="flex gap-1 mt-1 cursor-pointer group/imgs">
+          <button type="button" onClick={() => onZoom(urls, 0)} className="flex gap-1.5 mt-2 cursor-pointer group/imgs">
             {urls.slice(0, 2).map((url, i) => (
-              <div key={i} className="h-8 w-8 rounded-lg overflow-hidden border border-border bg-black/30 shadow-sm group-hover/imgs:border-primary/40 transition">
+              <div key={i} className="h-16 w-16 rounded-lg overflow-hidden border border-border bg-black/30 shadow-sm group-hover/imgs:border-primary/40 transition">
                 <img src={url} alt="Proof" className="h-full w-full object-cover" />
               </div>
             ))}
             {urls.length > 2 && (
-              <div className="h-8 w-8 rounded-lg border border-border/60 bg-foreground/[0.04] flex items-center justify-center text-[8px] font-bold text-muted-foreground">
+              <div className="h-16 w-16 rounded-lg border border-border/60 bg-foreground/[0.04] flex items-center justify-center text-[10px] font-bold text-muted-foreground">
                 +{urls.length - 2}
               </div>
             )}
