@@ -213,7 +213,7 @@ export function AdminPage() {
   const [adminNewPaymentSentDate, setAdminNewPaymentSentDate] = React.useState("")
   const [adminNewRating, setAdminNewRating] = React.useState(5)
   const [adminNewQuote, setAdminNewQuote] = React.useState("")
-  const [adminNewProofUrl, setAdminNewProofUrl] = React.useState("")
+  const [adminNewProofUrls, setAdminNewProofUrls] = React.useState<string[]>([])
   const [adminNewUploading, setAdminNewUploading] = React.useState(false)
   const [adminNewAmount, setAdminNewAmount] = React.useState<number>(0)
   const [adminNewAdminNotes, setAdminNewAdminNotes] = React.useState("")
@@ -229,7 +229,7 @@ export function AdminPage() {
   const [editingReviewPaymentSentDate, setEditingReviewPaymentSentDate] = React.useState("")
   const [editingReviewRating, setEditingReviewRating] = React.useState(5)
   const [editingReviewQuote, setEditingReviewQuote] = React.useState("")
-  const [editingReviewProofUrl, setEditingReviewProofUrl] = React.useState("")
+  const [editingReviewProofUrls, setEditingReviewProofUrls] = React.useState<string[]>([])
   const [editingReviewUploading, setEditingReviewUploading] = React.useState(false)
   const [editingReviewAmount, setEditingReviewAmount] = React.useState<number>(0)
   const [editingReviewAdminNotes, setEditingReviewAdminNotes] = React.useState("")
@@ -650,26 +650,32 @@ export function AdminPage() {
 
   // --- REVIEWS MODERATION ACTIONS ---
   const handleAdminImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, isEdit = false) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const files = Array.from(e.target.files || [])
+    if (!files.length) return
 
     if (isEdit) setEditingReviewUploading(true)
     else setAdminNewUploading(true)
 
     try {
-      const formData = new FormData()
-      formData.append("file", file)
-      const res = await fetch("https://veltrixcode-vscode.hf.space/upload", {
-        method: "POST",
-        body: formData
-      })
-      const data = await res.json()
-      if (data.success && data.url) {
-        if (isEdit) setEditingReviewProofUrl(data.url)
-        else setAdminNewProofUrl(data.url)
-        toast.success("Verification receipt uploaded!")
-      } else {
-        toast.error("Upload failed.")
+      const urls: string[] = []
+      for (const file of files) {
+        const formData = new FormData()
+        formData.append("file", file)
+        const res = await fetch("https://veltrixcode-vscode.hf.space/upload", {
+          method: "POST",
+          body: formData
+        })
+        const data = await res.json()
+        if (data.success && data.url) {
+          urls.push(data.url)
+        } else {
+          toast.error(`Upload failed for ${file.name}`)
+        }
+      }
+      if (urls.length > 0) {
+        if (isEdit) setEditingReviewProofUrls(prev => [...prev, ...urls])
+        else setAdminNewProofUrls(prev => [...prev, ...urls])
+        toast.success(`${urls.length} image(s) uploaded!`)
       }
     } catch (err) {
       console.error(err)
@@ -677,13 +683,14 @@ export function AdminPage() {
     } finally {
       if (isEdit) setEditingReviewUploading(false)
       else setAdminNewUploading(false)
+      e.target.value = ""
     }
   }
 
   const handleAddReview = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!adminNewName || !adminNewQuote || !adminNewTradeType || !adminNewProofUrl) {
-      toast.error("Name, proof description, route, and proof are required.")
+    if (!adminNewName || !adminNewQuote || !adminNewTradeType || adminNewProofUrls.length === 0) {
+      toast.error("Name, proof description, route, and at least one proof image are required.")
       return
     }
 
@@ -699,7 +706,7 @@ export function AdminPage() {
           quote: adminNewQuote,
           rating: adminNewRating,
           trade_type: adminNewTradeType,
-          proof_image_url: adminNewProofUrl,
+          proof_image_url: adminNewProofUrls.join("|||"),
           region: adminNewRegion || null,
           gc_received_date: adminNewGcReceivedDate || null,
           payment_sent_date: adminNewPaymentSentDate || null,
@@ -712,7 +719,7 @@ export function AdminPage() {
         toast.success("Proof successfully logged!")
         setAdminNewName("")
         setAdminNewQuote("")
-        setAdminNewProofUrl("")
+        setAdminNewProofUrls([])
         setAdminNewRegion("")
         setAdminNewGcReceivedDate("")
         setAdminNewPaymentSentDate("")
@@ -732,7 +739,7 @@ export function AdminPage() {
   }
 
   const handleUpdateReview = async (id: string | number) => {
-    if (!editingReviewName || !editingReviewQuote || !editingReviewTradeType || !editingReviewProofUrl) {
+    if (!editingReviewName || !editingReviewQuote || !editingReviewTradeType || editingReviewProofUrls.length === 0) {
       toast.error("All review fields are required.")
       return
     }
@@ -746,7 +753,7 @@ export function AdminPage() {
           quote: editingReviewQuote,
           rating: editingReviewRating,
           trade_type: editingReviewTradeType,
-          proof_image_url: editingReviewProofUrl,
+          proof_image_url: editingReviewProofUrls.join("|||"),
           region: editingReviewRegion || null,
           gc_received_date: editingReviewGcReceivedDate || null,
           payment_sent_date: editingReviewPaymentSentDate || null,
@@ -1865,11 +1872,30 @@ export function AdminPage() {
                       </div>
 
                       <div className="grid gap-2">
-                        <Label className="text-[10px] font-mono font-bold uppercase text-muted-foreground">Proof Receipt Image *</Label>
+                        <Label className="text-[10px] font-mono font-bold uppercase text-muted-foreground">
+                          Proof Receipt Images * {adminNewProofUrls.length > 0 && <span className="text-positive">({adminNewProofUrls.length} added)</span>}
+                        </Label>
+                        {adminNewProofUrls.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {adminNewProofUrls.map((url, i) => (
+                              <div key={i} className="relative rounded-xl overflow-hidden border border-border bg-background w-20 h-20 shrink-0">
+                                <img src={url} alt={`Proof ${i + 1}`} className="w-full h-full object-cover" />
+                                <button
+                                  type="button"
+                                  onClick={() => setAdminNewProofUrls(prev => prev.filter((_, idx) => idx !== i))}
+                                  className="absolute top-0.5 right-0.5 p-0.5 bg-negative text-white rounded-full hover:bg-red-600 transition z-30 cursor-pointer border-0"
+                                >
+                                  <X size={9} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                         <div className="relative border-2 border-dashed border-border/80 rounded-2xl p-4 flex flex-col items-center justify-center bg-foreground/[0.01] hover:bg-foreground/[0.02] hover:border-primary/45 transition duration-300 group overflow-hidden">
                           <input
                             type="file"
                             accept="image/*"
+                            multiple
                             onChange={(e) => handleAdminImageUpload(e, false)}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-30"
                             disabled={adminNewUploading}
@@ -1879,30 +1905,11 @@ export function AdminPage() {
                               <Loader2 className="animate-spin text-primary h-6 w-6 mb-2" />
                               <span className="text-[10px] text-muted-foreground font-mono">Uploading...</span>
                             </div>
-                          ) : adminNewProofUrl ? (
-                            <div className="flex flex-col items-center py-1 z-20 w-full">
-                              <div className="relative rounded-xl overflow-hidden border border-border bg-background max-h-24 max-w-full inline-block">
-                                <img src={adminNewProofUrl} alt="Uploaded Proof" className="h-20 object-cover" />
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.preventDefault()
-                                    setAdminNewProofUrl("")
-                                  }}
-                                  className="absolute top-1 right-1 p-1 bg-negative text-white rounded-full hover:bg-red-600 transition z-30 cursor-pointer border-0"
-                                >
-                                  <X size={10} />
-                                </button>
-                              </div>
-                              <span className="text-[9px] text-positive font-bold font-mono mt-2 flex items-center gap-1">
-                                <Check size={10} /> Ready for Submission
-                              </span>
-                            </div>
                           ) : (
                             <div className="flex flex-col items-center py-3 text-center z-20 group-hover:scale-105 transition-transform duration-300">
                               <Upload className="text-muted-foreground/80 group-hover:text-primary h-6 w-6 mb-2 transition-colors duration-300" />
-                              <span className="text-xs font-bold text-foreground">Upload Trade Proof</span>
-                              <span className="text-[9px] text-muted-foreground mt-1 font-mono">Drag receipt or click to upload</span>
+                              <span className="text-xs font-bold text-foreground">Add More Images</span>
+                              <span className="text-[9px] text-muted-foreground mt-1 font-mono">Select multiple files</span>
                             </div>
                           )}
                         </div>
