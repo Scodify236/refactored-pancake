@@ -11,90 +11,15 @@ const LOCAL_DB_PATH = path.resolve('database.json');
 
 const defaultLocalData = {
   cards: [
-    { id: 1, name: "Amazon", img: "amazon", tag: "Shopping", glow: "rgba(255, 153, 0, 0.4)", variants: [{ id: 1, name: "arena100", inr_rate: "100 INR", usdt_rate: "0.91 USDT" }] },
-    { id: 2, name: "Flipkart", img: "flipkart", tag: "Shopping", glow: "rgba(40, 116, 240, 0.4)", variants: [{ id: 3, name: "e-Gift Voucher", inr_rate: "90 INR", usdt_rate: null }] },
-    { id: 3, name: "Roblox", img: "roblox", tag: "Gaming", glow: "rgba(239, 68, 68, 0.4)", variants: [{ id: 4, name: "Gift Card", inr_rate: null, usdt_rate: "88 USDT" }] },
-    { id: 4, name: "League of Legends", img: "lol", tag: "Gaming", glow: "rgba(197, 168, 128, 0.35)", variants: [{ id: 5, name: "RP Gift Card", inr_rate: null, usdt_rate: "86 USDT" }] },
-    { id: 5, name: "Overwatch 2", img: "overwatch", tag: "Gaming", glow: "rgba(240, 100, 20, 0.4)", variants: [{ id: 6, name: "Coins Gift Card", inr_rate: null, usdt_rate: "84 USDT" }] },
-    { id: 6, name: "Sea of Thieves", img: "sot", tag: "Gaming", glow: "rgba(16, 185, 129, 0.4)", variants: [{ id: 7, name: "Ancient Coins Pack", inr_rate: null, usdt_rate: "82 USDT" }] },
+    { id: 1, name: "Amazon", img: "amazon", tag: "Shopping", glow: "rgba(255, 153, 0, 0.4)", variants: [] },
+    { id: 2, name: "Flipkart", img: "flipkart", tag: "Shopping", glow: "rgba(40, 116, 240, 0.4)", variants: [] },
+    { id: 3, name: "Roblox", img: "roblox", tag: "Gaming", glow: "rgba(239, 68, 68, 0.4)", variants: [] },
+    { id: 4, name: "League of Legends", img: "lol", tag: "Gaming", glow: "rgba(197, 168, 128, 0.35)", variants: [] },
+    { id: 5, name: "Overwatch 2", img: "overwatch", tag: "Gaming", glow: "rgba(240, 100, 20, 0.4)", variants: [] },
+    { id: 6, name: "Sea of Thieves", img: "sot", tag: "Gaming", glow: "rgba(16, 185, 129, 0.4)", variants: [] },
   ],
-  payouts: [
-    { id: 1, submission_date: "2026-05-08T00:00:00.000Z", payout_date: "2026-05-15T00:00:00.000Z", amount: "N/A", card_type: "All Cards", method: "Any", status: "Submission Closed" },
-    { id: 2, submission_date: "2026-05-16T00:00:00.000Z", payout_date: "2026-05-23T00:00:00.000Z", amount: "N/A", card_type: "All Cards", method: "Any", status: "Submission Closed" },
-    { id: 3, submission_date: "2026-06-08T00:00:00.000Z", payout_date: "2026-06-15T00:00:00.000Z", amount: "N/A", card_type: "All Cards", method: "Any", status: "Submission Open" },
-  ],
-  reviews: [
-    {
-      id: 1,
-      name: "Aarav Sharma",
-      role: "Casual Gamer",
-      avatar_url: "",
-      quote: "Had a ₹5,000 Amazon card sitting around from my birthday. Swapped it for UPI cash easily. The transaction felt extremely transparent.",
-      rating: 5,
-      trade_type: "Amazon ➔ UPI",
-      proof_image_url: "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=300&auto=format&fit=crop",
-      region: "IN",
-      gc_received_date: new Date(Date.now() - 3600000 * 24 * 5).toISOString(),
-      payment_sent_date: new Date().toISOString(),
-      created_at: new Date().toISOString()
-    },
-    {
-      id: 2,
-      name: "Elena Rostova",
-      role: "Freelancer",
-      avatar_url: "",
-      quote: "Liquidated a $200 Amazon US card directly into my Tron USDT address. Slipped rate was minimal, completed in 6 minutes flat.",
-      rating: 5,
-      trade_type: "Amazon US ➔ USDT",
-      proof_image_url: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=300&auto=format&fit=crop",
-      region: "US",
-      gc_received_date: new Date(Date.now() - 3600000 * 24 * 4).toISOString(),
-      payment_sent_date: new Date().toISOString(),
-      created_at: new Date().toISOString()
-    },
-    {
-      id: 3,
-      name: "Arjun Mehta",
-      role: "Pro Player",
-      avatar_url: "",
-      quote: "Fastest way to get cash for Steam codes. Walked through verification, and UPI transfer cleared immediately. Highly recommended.",
-      rating: 5,
-      trade_type: "Steam ➔ UPI",
-      proof_image_url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=300&auto=format&fit=crop",
-      region: "IN",
-      gc_received_date: new Date(Date.now() - 3600000 * 24 * 3).toISOString(),
-      payment_sent_date: new Date().toISOString(),
-      created_at: new Date().toISOString()
-    },
-    {
-      id: 4,
-      name: "Priya Nair",
-      role: "Developer",
-      avatar_url: "",
-      quote: "Verified trade system. Exchanged duplicate Apple Gift Card for local bank credits. Clean layout, prompt support desk.",
-      rating: 5,
-      trade_type: "Apple ➔ UPI",
-      proof_image_url: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=300&auto=format&fit=crop",
-      region: "IN",
-      gc_received_date: new Date(Date.now() - 3600000 * 24 * 2).toISOString(),
-      payment_sent_date: new Date().toISOString(),
-      created_at: new Date().toISOString()
-    },
-    {
-      id: 5,
-      name: "Marcus Vance",
-      role: "Crypto Trader",
-      avatar_url: "",
-      quote: "Consistently quick settlements. Traded Razer Gold cards for decentralized USDT stablecoin deposits. Secure Escrow routing.",
-      rating: 5,
-      trade_type: "Razer Gold ➔ USDT",
-      proof_image_url: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=300&auto=format&fit=crop",
-      region: "US",
-      gc_received_date: new Date(Date.now() - 3600000 * 24 * 1).toISOString(),
-      payment_sent_date: new Date().toISOString(),
-      created_at: new Date().toISOString()
-    }
-  ],
+  payouts: [],
+  reviews: [],
   appeals: []
 };
 
@@ -106,7 +31,6 @@ const initDb = async () => {
   pool = new Pool({ connectionString });
   pool.on('error', (err: any) => {
     console.error('Unexpected error on idle Neon PostgreSQL client:', err.message || err);
-    useLocalDb = true;
   });
   try {
     console.log("Attempting connection to Neon PostgreSQL...");
@@ -165,6 +89,7 @@ const initDb = async () => {
       ALTER TABLE reviews ALTER COLUMN proof_image_url TYPE TEXT;
       ALTER TABLE reviews ADD COLUMN IF NOT EXISTS amount NUMERIC DEFAULT 0;
       ALTER TABLE reviews ADD COLUMN IF NOT EXISTS amount_label VARCHAR(20) DEFAULT '';
+      ALTER TABLE reviews ADD COLUMN IF NOT EXISTS admin_notes TEXT;
     `);
 
     await client.query(`
@@ -204,12 +129,12 @@ const initDb = async () => {
     if (cardCount === 0) {
       console.log("Seeding cards database...");
       const seedCards = [
-        { name: "Amazon", img: "amazon", tag: "Shopping", glow: "rgba(255, 153, 0, 0.4)", variants: [{ name: "arena100", inr_rate: "100 INR", usdt_rate: "0.91 USDT" }] },
-        { name: "Flipkart", img: "flipkart", tag: "Shopping", glow: "rgba(40, 116, 240, 0.4)", variants: [{ name: "e-Gift Voucher", inr_rate: "90 INR", usdt_rate: null }] },
-        { name: "Roblox", img: "roblox", tag: "Gaming", glow: "rgba(239, 68, 68, 0.4)", variants: [{ name: "Gift Card", inr_rate: null, usdt_rate: "88 USDT" }] },
-        { name: "League of Legends", img: "lol", tag: "Gaming", glow: "rgba(197, 168, 128, 0.35)", variants: [{ name: "RP Gift Card", inr_rate: null, usdt_rate: "86 USDT" }] },
-        { name: "Overwatch 2", img: "overwatch", tag: "Gaming", glow: "rgba(240, 100, 20, 0.4)", variants: [{ name: "Coins Gift Card", inr_rate: null, usdt_rate: "84 USDT" }] },
-        { name: "Sea of Thieves", img: "sot", tag: "Gaming", glow: "rgba(16, 185, 129, 0.4)", variants: [{ name: "Ancient Coins Pack", inr_rate: null, usdt_rate: "82 USDT" }] }
+        { name: "Amazon", img: "amazon", tag: "Shopping", glow: "rgba(255, 153, 0, 0.4)", variants: [] },
+        { name: "Flipkart", img: "flipkart", tag: "Shopping", glow: "rgba(40, 116, 240, 0.4)", variants: [] },
+        { name: "Roblox", img: "roblox", tag: "Gaming", glow: "rgba(239, 68, 68, 0.4)", variants: [] },
+        { name: "League of Legends", img: "lol", tag: "Gaming", glow: "rgba(197, 168, 128, 0.35)", variants: [] },
+        { name: "Overwatch 2", img: "overwatch", tag: "Gaming", glow: "rgba(240, 100, 20, 0.4)", variants: [] },
+        { name: "Sea of Thieves", img: "sot", tag: "Gaming", glow: "rgba(16, 185, 129, 0.4)", variants: [] }
       ];
 
       for (const card of seedCards) {
@@ -217,13 +142,6 @@ const initDb = async () => {
           "INSERT INTO cards (name, img, tag, glow) VALUES ($1, $2, $3, $4) RETURNING id",
           [card.name, card.img, card.tag, card.glow]
         );
-        const cardId = cardRes.rows[0].id;
-        for (const variant of card.variants) {
-          await client.query(
-            "INSERT INTO card_variants (card_id, name, inr_rate, usdt_rate) VALUES ($1, $2, $3, $4)",
-            [cardId, variant.name, variant.inr_rate || null, variant.usdt_rate || null]
-          );
-        }
       }
       console.log("Seeding cards completed.");
     }
@@ -231,50 +149,20 @@ const initDb = async () => {
     const reviewCountRes = await client.query("SELECT COUNT(*) FROM reviews");
     const reviewCount = parseInt(reviewCountRes.rows[0].count, 10);
     if (reviewCount === 0) {
-      console.log("Seeding proofs...");
-      const seedProofs = [
-        { name: 'Aarav Sharma', role: 'Casual Gamer', quote: 'Had a ₹5,000 Amazon card sitting around from my birthday. Swapped it for UPI cash easily. The transaction felt extremely transparent.', trade_type: 'Amazon ➔ UPI', images: 'https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png', amount: 5000, label: '₹5k+', gc: '2026-07-08', pay: '2026-07-10' },
-        { name: 'Elena Rostova', role: 'Freelancer', quote: 'Liquidated a $200 Amazon US card directly into my Tron USDT address. Slipped rate was minimal, completed in 6 minutes flat.', trade_type: 'Amazon US ➔ USDT', images: 'https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png', amount: 16000, label: '₹10k+', gc: '2026-07-05', pay: '2026-07-06' },
-        { name: 'Arjun Mehta', role: 'Pro Player', quote: 'Fastest way to get cash for Steam codes. Walked through verification, and UPI transfer cleared immediately. Highly recommended.', trade_type: 'Steam ➔ UPI', images: 'https://i.ibb.co/4DcNDpt/x.png', amount: 8500, label: '₹5k+', gc: '2026-07-10', pay: '2026-07-11' },
-        { name: 'Priya Nair', role: 'Developer', quote: 'Verified trade system. Exchanged duplicate Apple Gift Card for local bank credits. Clean layout, prompt support desk.', trade_type: 'Apple ➔ UPI', images: 'https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png', amount: 25000, label: '₹25k+', gc: '2026-07-12', pay: '2026-07-13' },
-        { name: 'Marcus Vance', role: 'Crypto Trader', quote: 'Consistently quick settlements. Traded Razer Gold cards for decentralized USDT stablecoin deposits. Secure Escrow routing.', trade_type: 'Razer Gold ➔ USDT', images: 'https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png', amount: 51000, label: '₹50k+', gc: '2026-07-01', pay: '2026-07-02' },
-        { name: 'Rahul Verma', role: 'Student', quote: 'Got ₹12,000 for my Flipkart cards instantly. Never thought this was possible. GCX is the real deal.', trade_type: 'Flipkart ➔ UPI', images: 'https://i.ibb.co/4DcNDpt/x.png', amount: 12000, label: '₹10k+', gc: '2026-07-07', pay: '2026-07-08' },
-        { name: 'Sneha Kulkarni', role: 'Designer', quote: 'Quick and reliable. Sold my Roblox gift card for USDT in under 10 minutes. The rate was fair and the process was super smooth.', trade_type: 'Roblox ➔ USDT', images: 'https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png', amount: 7200, label: '₹5k+', gc: '2026-07-09', pay: '2026-07-09' },
-        { name: 'Karan Joshi', role: 'Businessman', quote: 'Exchanged multiple Amazon cards totaling ₹30k in one go. Settlement was prompt and admin was very responsive.', trade_type: 'Amazon ➔ UPI', images: 'https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png', amount: 30000, label: '₹25k+', gc: '2026-07-03', pay: '2026-07-04' },
-        { name: 'Divya Patel', role: 'Homemaker', quote: 'Used GCX to sell an old Flipkart voucher received as a gift. Got INR directly in my UPI. Very trustworthy service.', trade_type: 'Flipkart ➔ UPI', images: 'https://i.ibb.co/4DcNDpt/x.png', amount: 6000, label: '₹5k+', gc: '2026-07-11', pay: '2026-07-12' },
-        { name: 'Rohan Singh', role: 'Engineer', quote: 'Best rates for League of Legends cards. Received USDT within minutes. Will definitely use again.', trade_type: 'League of Legends ➔ USDT', images: 'https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png', amount: 18000, label: '₹10k+', gc: '2026-07-13', pay: '2026-07-14' },
-        { name: 'Anjali Sharma', role: 'Teacher', quote: 'Sold a large Amazon US card for ₹55,000 worth. The process was transparent, admin kept me updated throughout.', trade_type: 'Amazon US ➔ UPI', images: 'https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png,https://i.ibb.co/4DcNDpt/x.png', amount: 55000, label: '₹50k+', gc: '2026-07-15', pay: '2026-07-16' },
-        { name: 'Vikas Rao', role: 'Trader', quote: 'Converted Overwatch 2 coins cards to USDT for international use. Fast, safe, no hidden fees.', trade_type: 'Overwatch 2 ➔ USDT', images: 'https://i.ibb.co/4DcNDpt/x.png', amount: 28000, label: '₹25k+', gc: '2026-07-06', pay: '2026-07-07' },
-      ];
-      for (const p of seedProofs) {
-        await client.query(
-          'INSERT INTO reviews (name, role, quote, rating, trade_type, proof_image_url, amount, amount_label, gc_received_date, payment_sent_date, verified) VALUES ($1, $2, $3, 5, $4, $5, $6, $7, $8, $9, TRUE)',
-          [p.name, p.role, p.quote, p.trade_type, p.images, p.amount, p.label, p.gc, p.pay]
-        );
-      }
-      console.log("Seeding proofs completed.");
+      console.log("No proofs seed data (production mode).");
     }
 
     const payoutCountRes = await client.query("SELECT COUNT(*) FROM payouts");
     const payoutCount = parseInt(payoutCountRes.rows[0].count, 10);
     if (payoutCount === 0) {
-      console.log("Seeding payouts...");
-      await client.query(`
-        INSERT INTO payouts (submission_date, payout_date, amount, card_type, method, status) VALUES 
-        ('2026-05-08T00:00:00.000Z', '2026-05-15T00:00:00.000Z', 'N/A', 'All Cards', 'Any', 'Submission Closed'),
-        ('2026-05-16T00:00:00.000Z', '2026-05-23T00:00:00.000Z', 'N/A', 'All Cards', 'Any', 'Submission Closed'),
-        ('2026-06-08T00:00:00.000Z', '2026-06-15T00:00:00.000Z', 'N/A', 'All Cards', 'Any', 'Submission Open');
-      `);
-      console.log("Seeding payouts completed.");
+      console.log("No payouts seed data (production mode).");
     }
 
     client.release();
     console.log("Neon PostgreSQL Connected successfully!");
     useLocalDb = false;
   } catch (err: any) {
-    console.warn("WARNING: Neon PostgreSQL connection failed or timed out. Falling back to local DB.");
-    console.warn("Detail:", err.message);
-    useLocalDb = true;
+    console.error("FATAL: Neon PostgreSQL connection failed or timed out:", err.message);
   }
 };
 

@@ -17,6 +17,7 @@ interface Proof {
   amount?: number
   amount_label?: string
   created_at?: string
+  admin_notes?: string | null
 }
 
 type AmountFilter = "All" | "₹5k+" | "₹10k+" | "₹25k+" | "₹50k+"
@@ -154,12 +155,14 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
       </div>
 
       {/* Admin Note Badge */}
-      <div className="p-2.5 rounded-xl bg-primary/[0.02] border border-primary/20 text-left mt-auto">
-        <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">Transaction Verification Note</span>
-        <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium">
-          "Trade settled. {proof.trade_type} voucher confirmed and net value payout credited to verified client channels."
-        </p>
-      </div>
+      {proof.admin_notes && (
+        <div className="p-2.5 rounded-xl bg-primary/[0.02] border border-primary/20 text-left mt-auto">
+          <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">Transaction Verification Note</span>
+          <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium">
+            "{proof.admin_notes}"
+          </p>
+        </div>
+      )}
     </div>
   )
 }
@@ -225,12 +228,14 @@ function TimelineCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[]
         </p>
 
         {/* Admin Complement note under image */}
-        <div className="p-2.5 rounded-xl bg-primary/[0.02] border border-primary/20 text-left">
-          <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">Admin Verification Note</span>
-          <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium font-sans">
-            "Trade successfully completed. Digital voucher of {proof.trade_type} received and payout processed securely under verified transaction protocol."
-          </p>
-        </div>
+        {proof.admin_notes && (
+          <div className="p-2.5 rounded-xl bg-primary/[0.02] border border-primary/20 text-left">
+            <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">Admin Verification Note</span>
+            <p className="text-[10px] leading-relaxed text-muted-foreground italic font-medium font-sans">
+              "{proof.admin_notes}"
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Footer / User Meta */}
