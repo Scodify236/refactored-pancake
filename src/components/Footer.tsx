@@ -15,7 +15,20 @@ export function Footer() {
           <Link to="/terms" className="hover:text-foreground transition">Terms</Link>
           <Link to="/support" className="hover:text-foreground transition">Support</Link>
         </div>
-        <p>© {new Date().getFullYear()} GCX. All rights reserved.</p>
+        <div className="flex flex-col sm:items-end gap-1 text-center sm:text-right">
+          <p>© 2026 GCX. All rights reserved.</p>
+          <p className="text-xs">
+            Designed & Hosted by{" "}
+            <a 
+              href="https://coderbauer.in" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-foreground transition underline underline-offset-4"
+            >
+              coderbauer
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   )
