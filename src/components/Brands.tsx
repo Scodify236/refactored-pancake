@@ -124,7 +124,7 @@ export function Brands() {
                     </div>
 
                     {/* Centered Graphic Container */}
-                    <div className="h-40 w-full flex items-center justify-center mb-6 bg-gradient-to-b from-foreground/[0.01] to-foreground/[0.03] rounded-2xl border border-border/30 p-4">
+                    <div className="h-56 w-full flex items-center justify-center mb-6 bg-gradient-to-b from-foreground/[0.01] to-foreground/[0.03] rounded-2xl border border-border/30 p-4">
                       <img
                         src={getCardImage(b.img)}
                         alt={`${b.name} gift card`}
