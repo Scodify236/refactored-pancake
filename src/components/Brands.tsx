@@ -124,22 +124,18 @@ export function Brands() {
                     </div>
 
                     {/* Centered Graphic Container */}
-                    <div className="h-32 w-full flex items-center justify-center mb-6 bg-gradient-to-b from-foreground/[0.01] to-foreground/[0.03] rounded-2xl border border-border/30 p-4">
+                    <div className="h-40 w-full flex items-center justify-center mb-6 bg-gradient-to-b from-foreground/[0.01] to-foreground/[0.03] rounded-2xl border border-border/30 p-4">
                       <img
                         src={getCardImage(b.img)}
                         alt={`${b.name} gift card`}
                         loading="lazy"
-                        className="max-h-full w-auto object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-105"
+                        className="max-h-full w-auto object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-110"
                       />
                     </div>
 
                     {/* Text details */}
-                    <div className="space-y-3">
-                      <h3 className="text-lg font-bold font-display text-foreground group-hover:text-primary transition-colors duration-200">{b.name}</h3>
-                      <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-foreground/[0.015] border border-border/40">
-                        <span className="text-[9px] font-mono font-bold text-muted-foreground uppercase tracking-wider">Settlement</span>
-                        <span className="text-xs font-bold text-primary">{rate}</span>
-                      </div>
+                    <div className="space-y-3 text-center">
+                      <h3 className="text-xl font-bold font-display text-foreground group-hover:text-primary transition-colors duration-200">{b.name}</h3>
                     </div>
                   </div>
 
