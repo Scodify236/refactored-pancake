@@ -23,7 +23,7 @@ export function Footer() {
               href="https://coderbauer.in" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="hover:text-foreground transition underline underline-offset-4"
+              className="text-red-500 hover:text-red-400 font-bold transition underline underline-offset-4"
             >
               CoderBauer
             </a>
