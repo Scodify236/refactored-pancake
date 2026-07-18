@@ -379,6 +379,7 @@ export function ReviewsPage() {
               </div>
             ))}
           </div>
+         ) : (
           /* TIMELINE VIEW — Premium, atmospheric vertical timeline thread */
           <div className="relative max-w-3xl mx-auto pl-4 sm:pl-0">
             {/* Center spine for md+ viewports, left spine for mobile */}

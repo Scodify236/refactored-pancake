@@ -3673,6 +3673,11 @@
       "imports": [],
       "format": "cjs"
     },
+    ".open-next/server-functions/default/.next/server/app/api/variants/[id]/route_client-reference-manifest.js": {
+      "bytes": 322,
+      "imports": [],
+      "format": "cjs"
+    },
     ".open-next/server-functions/default/.next/server/app/api/payouts/batch/route_client-reference-manifest.js": {
       "bytes": 322,
       "imports": [],
@@ -3683,12 +3688,7 @@
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/api/variants/[id]/route_client-reference-manifest.js": {
-      "bytes": 322,
-      "imports": [],
-      "format": "cjs"
-    },
-    ".open-next/server-functions/default/.next/server/app/api/payouts/[id]/route_client-reference-manifest.js": {
+    ".open-next/server-functions/default/.next/server/app/api/reviews/[id]/route_client-reference-manifest.js": {
       "bytes": 321,
       "imports": [],
       "format": "cjs"
@@ -3698,7 +3698,7 @@
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/api/reviews/[id]/route_client-reference-manifest.js": {
+    ".open-next/server-functions/default/.next/server/app/api/payouts/[id]/route_client-reference-manifest.js": {
       "bytes": 321,
       "imports": [],
       "format": "cjs"
@@ -3713,12 +3713,12 @@
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/api/payouts/route_client-reference-manifest.js": {
+    ".open-next/server-functions/default/.next/server/app/api/appeals/route_client-reference-manifest.js": {
       "bytes": 316,
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/api/appeals/route_client-reference-manifest.js": {
+    ".open-next/server-functions/default/.next/server/app/api/payouts/route_client-reference-manifest.js": {
       "bytes": 316,
       "imports": [],
       "format": "cjs"
@@ -3767,6 +3767,11 @@
           "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/auth/verify-otp/route_client-reference-manifest.js"
         },
         {
+          "path": ".open-next/server-functions/default/.next/server/app/api/variants/[id]/route_client-reference-manifest.js",
+          "kind": "require-call",
+          "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/variants/[id]/route_client-reference-manifest.js"
+        },
+        {
           "path": ".open-next/server-functions/default/.next/server/app/api/payouts/batch/route_client-reference-manifest.js",
           "kind": "require-call",
           "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/payouts/batch/route_client-reference-manifest.js"
@@ -3777,14 +3782,9 @@
           "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/auth/send-otp/route_client-reference-manifest.js"
         },
         {
-          "path": ".open-next/server-functions/default/.next/server/app/api/variants/[id]/route_client-reference-manifest.js",
+          "path": ".open-next/server-functions/default/.next/server/app/api/reviews/[id]/route_client-reference-manifest.js",
           "kind": "require-call",
-          "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/variants/[id]/route_client-reference-manifest.js"
-        },
-        {
-          "path": ".open-next/server-functions/default/.next/server/app/api/payouts/[id]/route_client-reference-manifest.js",
-          "kind": "require-call",
-          "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/payouts/[id]/route_client-reference-manifest.js"
+          "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/reviews/[id]/route_client-reference-manifest.js"
         },
         {
           "path": ".open-next/server-functions/default/.next/server/app/api/appeals/[id]/route_client-reference-manifest.js",
@@ -3792,9 +3792,9 @@
           "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/appeals/[id]/route_client-reference-manifest.js"
         },
         {
-          "path": ".open-next/server-functions/default/.next/server/app/api/reviews/[id]/route_client-reference-manifest.js",
+          "path": ".open-next/server-functions/default/.next/server/app/api/payouts/[id]/route_client-reference-manifest.js",
           "kind": "require-call",
-          "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/reviews/[id]/route_client-reference-manifest.js"
+          "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/payouts/[id]/route_client-reference-manifest.js"
         },
         {
           "path": ".open-next/server-functions/default/.next/server/app/api/cards/[id]/route_client-reference-manifest.js",
@@ -3807,14 +3807,14 @@
           "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/reviews/route_client-reference-manifest.js"
         },
         {
-          "path": ".open-next/server-functions/default/.next/server/app/api/payouts/route_client-reference-manifest.js",
-          "kind": "require-call",
-          "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/payouts/route_client-reference-manifest.js"
-        },
-        {
           "path": ".open-next/server-functions/default/.next/server/app/api/appeals/route_client-reference-manifest.js",
           "kind": "require-call",
           "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/appeals/route_client-reference-manifest.js"
+        },
+        {
+          "path": ".open-next/server-functions/default/.next/server/app/api/payouts/route_client-reference-manifest.js",
+          "kind": "require-call",
+          "original": "/Users/shashwat/Documents/desk/GCX/.open-next/server-functions/default/.next/server/app/api/payouts/route_client-reference-manifest.js"
         },
         {
           "path": ".open-next/server-functions/default/.next/server/app/api/cards/route_client-reference-manifest.js",
@@ -9954,22 +9954,22 @@
         ".open-next/server-functions/default/.next/server/app/api/auth/verify-otp/route_client-reference-manifest.js": {
           "bytesInOutput": 467
         },
+        ".open-next/server-functions/default/.next/server/app/api/variants/[id]/route_client-reference-manifest.js": {
+          "bytesInOutput": 463
+        },
         ".open-next/server-functions/default/.next/server/app/api/payouts/batch/route_client-reference-manifest.js": {
           "bytesInOutput": 463
         },
         ".open-next/server-functions/default/.next/server/app/api/auth/send-otp/route_client-reference-manifest.js": {
           "bytesInOutput": 463
         },
-        ".open-next/server-functions/default/.next/server/app/api/variants/[id]/route_client-reference-manifest.js": {
-          "bytesInOutput": 463
-        },
-        ".open-next/server-functions/default/.next/server/app/api/payouts/[id]/route_client-reference-manifest.js": {
+        ".open-next/server-functions/default/.next/server/app/api/reviews/[id]/route_client-reference-manifest.js": {
           "bytesInOutput": 461
         },
         ".open-next/server-functions/default/.next/server/app/api/appeals/[id]/route_client-reference-manifest.js": {
           "bytesInOutput": 461
         },
-        ".open-next/server-functions/default/.next/server/app/api/reviews/[id]/route_client-reference-manifest.js": {
+        ".open-next/server-functions/default/.next/server/app/api/payouts/[id]/route_client-reference-manifest.js": {
           "bytesInOutput": 461
         },
         ".open-next/server-functions/default/.next/server/app/api/cards/[id]/route_client-reference-manifest.js": {
@@ -9978,10 +9978,10 @@
         ".open-next/server-functions/default/.next/server/app/api/reviews/route_client-reference-manifest.js": {
           "bytesInOutput": 452
         },
-        ".open-next/server-functions/default/.next/server/app/api/payouts/route_client-reference-manifest.js": {
+        ".open-next/server-functions/default/.next/server/app/api/appeals/route_client-reference-manifest.js": {
           "bytesInOutput": 452
         },
-        ".open-next/server-functions/default/.next/server/app/api/appeals/route_client-reference-manifest.js": {
+        ".open-next/server-functions/default/.next/server/app/api/payouts/route_client-reference-manifest.js": {
           "bytesInOutput": 452
         },
         ".open-next/server-functions/default/.next/server/app/api/cards/route_client-reference-manifest.js": {
