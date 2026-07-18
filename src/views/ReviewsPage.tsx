@@ -390,7 +390,7 @@ export function ReviewsPage() {
                 <div key={date} className="relative">
                   {/* Date Badge Indicator */}
                   <div className="flex md:justify-center items-center mb-8 relative z-10">
-                    <div className="flex items-center gap-2 bg-zinc-900/90 backdrop-blur-xl border border-primary/25 rounded-full px-5 py-2.5 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+                    <div className="flex items-center gap-2 bg-card border border-border rounded-full px-5 py-2.5 shadow-sm">
                       <Calendar size={13} className="text-primary" />
                       <span className="text-[11px] font-bold text-foreground font-mono uppercase tracking-wider">{date}</span>
                       <span className="text-[9px] font-bold text-primary bg-primary/10 border border-primary/20 rounded-full px-2.5 py-0.5">
@@ -408,14 +408,14 @@ export function ReviewsPage() {
                         <div key={p.id} className="relative grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                           {/* Anchor connector node */}
                           <div className="absolute left-0 md:left-1/2 top-8 -translate-x-1/2 z-20 flex items-center justify-center">
-                            <div className="h-4 w-4 rounded-full bg-zinc-950 border-2 border-primary shadow-[0_0_8px_rgba(212,175,55,0.5)] flex items-center justify-center">
-                              <div className="h-1.5 w-1.5 rounded-full bg-primary animate-ping" />
+                            <div className="h-4 w-4 rounded-full bg-background border-2 border-primary shadow-sm flex items-center justify-center">
+                              <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                             </div>
                           </div>
 
                           {/* Alternating wrapper */}
                           <div className={`col-span-1 pl-8 md:pl-0 ${isLeft ? "md:col-start-1" : "md:col-start-2"}`}>
-                            <div className="relative rounded-[2rem] border border-border/60 bg-card/45 backdrop-blur-xl p-6 hover:border-primary/45 hover:shadow-[0_8px_30px_rgb(212,175,55,0.06)] hover:-translate-y-0.5 transition-all duration-300 group">
+                            <div className="relative rounded-[2rem] border border-border/60 bg-card/65 p-6 hover:border-primary/45 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
                               
                               {/* Title block */}
                               <div className="flex flex-wrap items-center justify-between gap-2 mb-4 border-b border-border/40 pb-3">
