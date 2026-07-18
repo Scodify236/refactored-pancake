@@ -372,10 +372,9 @@ export function ReviewsPage() {
             No proofs found in this category yet.
           </div>
         ) : viewMode === "grid" ? (
-          /* MASONRY/COLUMNS VIEW (Flows according to content height) */
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4 [column-fill:_balance] [&>*]:break-inside-avoid">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map(p => (
-              <div key={p.id} className="inline-block w-full">
+              <div key={p.id} className="w-full">
                 <ProofCard proof={p} onZoom={openZoom} />
               </div>
             ))}
