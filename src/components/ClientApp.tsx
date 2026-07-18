@@ -17,7 +17,7 @@ if (typeof window !== 'undefined') {
 
 export default function ClientApp() {
   return (
-    <ThemeProvider>
+    <ThemeProvider defaultTheme="light">
       <App />
     </ThemeProvider>
   );
