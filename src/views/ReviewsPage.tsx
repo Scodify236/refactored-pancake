@@ -380,134 +380,128 @@ export function ReviewsPage() {
             ))}
           </div>
          ) : (
-          /* TIMELINE VIEW — Premium, atmospheric vertical timeline thread */
-          <div className="relative max-w-3xl mx-auto pl-4 sm:pl-0">
-            {/* Center spine for md+ viewports, left spine for mobile */}
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary/80 via-border/50 to-transparent -translate-x-1/2" />
+          /* TIMELINE VIEW — Clean sequential left-aligned timeline thread */
+          <div className="relative max-w-2xl mx-auto pl-6 sm:pl-8">
+            {/* Timeline thread line on the left */}
+            <div className="absolute left-[9px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-primary via-border/50 to-transparent" />
 
-            <div className="space-y-16 relative">
+            <div className="space-y-12 relative">
               {Array.from(dateGroups.entries()).map(([date, dayProofs]) => (
-                <div key={date} className="relative">
-                  {/* Date Badge Indicator */}
-                  <div className="flex md:justify-center items-center mb-8 relative z-10">
-                    <div className="flex items-center gap-2 bg-card border border-border rounded-full px-5 py-2.5 shadow-sm">
-                      <Calendar size={13} className="text-primary" />
-                      <span className="text-[11px] font-bold text-foreground font-mono uppercase tracking-wider">{date}</span>
-                      <span className="text-[9px] font-bold text-primary bg-primary/10 border border-primary/20 rounded-full px-2.5 py-0.5">
-                        {dayProofs.length} Run{dayProofs.length > 1 ? "s" : ""}
+                <div key={date} className="space-y-6">
+                  {/* Date Marker Row */}
+                  <div className="flex items-center gap-3 relative z-10 -ml-[22px] sm:-ml-[30px]">
+                    {/* Ring Milestone Dot */}
+                    <div className="h-5 w-5 rounded-full bg-background border-2 border-primary shadow-sm flex items-center justify-center shrink-0">
+                      <div className="h-2 w-2 rounded-full bg-primary" />
+                    </div>
+                    <div className="flex items-center gap-2 bg-card border border-border/80 rounded-full px-4 py-1.5 shadow-sm">
+                      <Calendar size={11} className="text-primary" />
+                      <span className="text-[10px] font-bold text-foreground font-mono uppercase tracking-wider">{date}</span>
+                      <span className="text-[8px] font-mono text-muted-foreground">
+                        ({dayProofs.length} Run{dayProofs.length > 1 ? "s" : ""})
                       </span>
                     </div>
+                    <div className="flex-1 h-px bg-gradient-to-r from-border/50 to-transparent" />
                   </div>
 
                   {/* Day Runs list */}
-                  <div className="space-y-8">
-                    {dayProofs.map((p, i) => {
-                      // Alternate side positioning for md+ viewports
-                      const isLeft = i % 2 === 0
+                  <div className="space-y-6 pl-2">
+                    {dayProofs.map((p) => {
                       return (
-                        <div key={p.id} className="relative grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                          {/* Anchor connector node */}
-                          <div className="absolute left-0 md:left-1/2 top-8 -translate-x-1/2 z-20 flex items-center justify-center">
-                            <div className="h-4 w-4 rounded-full bg-background border-2 border-primary shadow-sm flex items-center justify-center">
-                              <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                            </div>
-                          </div>
+                        <div key={p.id} className="relative">
+                          {/* Inner connecting bullet */}
+                          <div className="absolute -left-[27px] sm:-left-[35px] top-6 h-2 w-2 rounded-full bg-border border border-background z-10" />
 
-                          {/* Alternating wrapper */}
-                          <div className={`col-span-1 pl-8 md:pl-0 ${isLeft ? "md:col-start-1" : "md:col-start-2"}`}>
-                            <div className="relative rounded-[2rem] border border-border/60 bg-card/65 p-6 hover:border-primary/45 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
-                              
-                              {/* Title block */}
-                              <div className="flex flex-wrap items-center justify-between gap-2 mb-4 border-b border-border/40 pb-3">
-                                <div>
-                                  <h4 className="text-[12px] font-extrabold text-foreground tracking-tight">{p.name}</h4>
-                                  <span className="text-[9px] text-muted-foreground font-mono">{p.role}</span>
+                          <div className="relative rounded-2xl border border-border/50 bg-card/60 p-5 hover:border-primary/30 transition duration-300">
+                            
+                            {/* Card Header */}
+                            <div className="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-border/30">
+                              <div>
+                                <h4 className="text-[11.5px] font-bold text-foreground tracking-tight">{p.name}</h4>
+                                <span className="text-[8.5px] text-muted-foreground font-mono">{p.role}</span>
+                              </div>
+                              <span className="text-[7.5px] font-extrabold rounded-full px-2 py-0.5 border text-emerald-400 bg-emerald-500/10 border-emerald-500/20 uppercase tracking-wider">
+                                Settle Verified
+                              </span>
+                            </div>
+
+                            {/* Proof thumbnails */}
+                            {p.proof_image_url && (() => {
+                              const urls = p.proof_image_url.split("|||").map(u => u.trim()).filter(Boolean)
+                              if (!urls.length) return null
+                              return (
+                                <div className="mb-3">
+                                  <div className={`grid gap-1.5 ${
+                                    urls.length === 1 ? "grid-cols-1" :
+                                    urls.length === 2 ? "grid-cols-2" :
+                                    "grid-cols-3"
+                                  }`}>
+                                    {urls.slice(0, urls.length <= 3 ? urls.length : 2).map((url, idx) => (
+                                      <button
+                                        key={idx}
+                                        type="button"
+                                        onClick={() => openZoom(urls, idx)}
+                                        className="relative overflow-hidden rounded-xl border border-border bg-black/20 cursor-zoom-in group/img focus:outline-none"
+                                        style={{ aspectRatio: urls.length === 1 ? "16/9" : "4/3" }}
+                                      >
+                                        <img src={url} alt="receipt" className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300" />
+                                      </button>
+                                    ))}
+                                    {urls.length > 3 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => openZoom(urls, 2)}
+                                        className="relative overflow-hidden rounded-xl border border-border bg-black/20 cursor-zoom-in group/img focus:outline-none"
+                                        style={{ aspectRatio: "4/3" }}
+                                      >
+                                        <img src={urls[2]} alt="receipt" className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300" />
+                                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                                          <span className="text-white font-bold text-[10px]">+{urls.length - 2}</span>
+                                        </div>
+                                      </button>
+                                    )}
+                                  </div>
                                 </div>
-                                <span className="text-[8px] font-black rounded-full px-2.5 py-1 border text-emerald-400 bg-emerald-500/10 border-emerald-500/20 uppercase tracking-wider flex items-center gap-1">
-                                  <CheckCircle size={8} /> Verified Settlement
+                              )
+                            })()}
+
+                            {/* Quote */}
+                            <p className="text-[11px] leading-relaxed text-muted-foreground italic font-sans mb-3">
+                              "{p.quote}"
+                            </p>
+
+                            {/* Ledgers metadata bar */}
+                            <div className="grid grid-cols-2 gap-2 bg-foreground/[0.01] border border-border/30 rounded-xl p-2.5 text-[9px] font-mono text-muted-foreground mb-3">
+                              <div>
+                                <span className="block text-[7.5px] uppercase tracking-wider text-muted-foreground/60 mb-0.5">Route</span>
+                                <span className="font-bold text-foreground text-[10px] uppercase tracking-tight">{p.trade_type}</span>
+                              </div>
+                              <div className="text-right">
+                                <span className="block text-[7.5px] uppercase tracking-wider text-muted-foreground/60 mb-0.5">Disbursed</span>
+                                <span className="font-bold text-emerald-400 text-[10px]">
+                                  {p.amount_label || "Settled"}
                                 </span>
                               </div>
-
-                              {/* Proof receipt thumbnails grid */}
-                              {p.proof_image_url && (() => {
-                                const urls = p.proof_image_url.split("|||").map(u => u.trim()).filter(Boolean)
-                                if (!urls.length) return null
-                                return (
-                                  <div className="mb-4">
-                                    <div className={`grid gap-2 ${
-                                      urls.length === 1 ? "grid-cols-1" :
-                                      urls.length === 2 ? "grid-cols-2" :
-                                      "grid-cols-3"
-                                    }`}>
-                                      {urls.slice(0, urls.length <= 3 ? urls.length : 2).map((url, idx) => (
-                                        <button
-                                          key={idx}
-                                          type="button"
-                                          onClick={() => openZoom(urls, idx)}
-                                          className="relative overflow-hidden rounded-xl border border-border/60 bg-black/40 cursor-zoom-in group/img focus:outline-none"
-                                          style={{ aspectRatio: urls.length === 1 ? "16/9" : "4/3" }}
-                                        >
-                                          <img src={url} alt="receipt" className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300" />
-                                          <div className="absolute inset-0 bg-black/25 opacity-0 group-hover/img:opacity-100 transition flex items-center justify-center">
-                                            <span className="text-[9px] font-bold text-white bg-black/75 px-2 py-0.5 rounded-md">Zoom</span>
-                                          </div>
-                                        </button>
-                                      ))}
-                                      {urls.length > 3 && (
-                                        <button
-                                          type="button"
-                                          onClick={() => openZoom(urls, 2)}
-                                          className="relative overflow-hidden rounded-xl border border-border/60 bg-black/40 cursor-zoom-in group/img focus:outline-none"
-                                          style={{ aspectRatio: "4/3" }}
-                                        >
-                                          <img src={urls[2]} alt="receipt" className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300" />
-                                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                            <span className="text-white font-bold text-xs">+{urls.length - 2}</span>
-                                          </div>
-                                        </button>
-                                      )}
-                                    </div>
-                                  </div>
-                                )
-                              })()}
-
-                              {/* Quote block */}
-                              <p className="text-[11.5px] leading-relaxed text-muted-foreground italic font-medium mb-4">
-                                "{p.quote}"
-                              </p>
-
-                              {/* Ledgers metadata bar */}
-                              <div className="grid grid-cols-2 gap-2 bg-foreground/[0.015] border border-border/30 rounded-xl p-3 text-[10px] font-mono text-muted-foreground mb-4">
-                                <div>
-                                  <span className="block text-[8px] uppercase tracking-wider text-muted-foreground/60 mb-0.5">Payment Route</span>
-                                  <span className="font-bold text-foreground text-[10.5px] uppercase tracking-tight">{p.trade_type}</span>
-                                </div>
-                                <div className="text-right">
-                                  <span className="block text-[8px] uppercase tracking-wider text-muted-foreground/60 mb-0.5">Value Settle</span>
-                                  <span className="font-bold text-emerald-400 text-[10.5px]">
-                                    {p.amount_label || "Completed"}
-                                  </span>
-                                </div>
-                              </div>
-
-                              {/* Notes */}
-                              {p.admin_notes && (
-                                <div className="p-3 rounded-xl bg-primary/[0.02] border border-primary/20 text-left mb-4">
-                                  <span className="text-[8px] font-extrabold text-primary uppercase tracking-wider block mb-0.5">System Verification Check</span>
-                                  <p className="text-[10px] leading-relaxed text-muted-foreground font-sans">
-                                    {p.admin_notes}
-                                  </p>
-                                </div>
-                              )}
-
-                              <div className="flex items-center justify-between pt-2 border-t border-border/30 text-[9px] text-muted-foreground font-mono">
-                                <span>Batch Run ID: #{p.id}</span>
-                                {p.payment_sent_date && (
-                                  <span>Paid: {formatDate(p.payment_sent_date)}</span>
-                                )}
-                              </div>
-
                             </div>
+
+                            {/* Verification Notes */}
+                            {p.admin_notes && (
+                              <div className="p-2.5 rounded-xl bg-primary/[0.01] border border-primary/10 text-left mb-3">
+                                <span className="text-[7.5px] font-bold text-primary uppercase tracking-wider block mb-0.5">Audit Log Note</span>
+                                <p className="text-[9.5px] leading-relaxed text-muted-foreground font-sans">
+                                  {p.admin_notes}
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Footer */}
+                            <div className="flex items-center justify-between pt-2 border-t border-border/20 text-[8.5px] text-muted-foreground font-mono">
+                              <span>Batch #{p.id}</span>
+                              {p.payment_sent_date && (
+                                <span>Date: {formatDate(p.payment_sent_date)}</span>
+                              )}
+                            </div>
+
                           </div>
                         </div>
                       )
