@@ -2,8 +2,6 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import fs from 'fs';
 import path from 'path';
 
-const LOCAL_DB_PATH = path.resolve('database.json');
-
 const defaultLocalData = {
   cards: [
     { id: 1, name: "Amazon", img: "amazon", tag: "Shopping", glow: "rgba(255, 153, 0, 0.4)", variants: [] },
@@ -19,70 +17,77 @@ const defaultLocalData = {
 };
 
 let useLocalDb = false;
+let memoryDb: any = null;
 
 const initD1Db = async (d1: any) => {
-  try {
-    console.log("Ensuring D1 database tables exist...");
-    await d1.exec(`
-      CREATE TABLE IF NOT EXISTS cards (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT UNIQUE NOT NULL,
-        img TEXT NOT NULL,
-        tag TEXT NOT NULL,
-        glow TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS card_variants (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        card_id INTEGER REFERENCES cards(id) ON DELETE CASCADE,
-        name TEXT NOT NULL,
-        inr_rate TEXT,
-        usdt_rate TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS reviews (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        role TEXT DEFAULT 'Customer',
-        avatar_url TEXT,
-        quote TEXT NOT NULL,
-        rating INTEGER DEFAULT 5,
-        trade_type TEXT NOT NULL,
-        proof_image_url TEXT NOT NULL,
-        verified INTEGER DEFAULT 1,
-        region TEXT,
-        gc_received_date TEXT,
-        payment_sent_date TEXT,
-        amount REAL DEFAULT 0,
-        amount_label TEXT DEFAULT '',
-        admin_notes TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS payouts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        submission_date TEXT NOT NULL,
-        payout_date TEXT NOT NULL,
-        amount TEXT NOT NULL,
-        card_type TEXT NOT NULL,
-        method TEXT NOT NULL,
-        status TEXT DEFAULT 'Completed',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      CREATE TABLE IF NOT EXISTS appeals (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        phone TEXT NOT NULL,
-        card_type TEXT NOT NULL,
-        email TEXT NOT NULL,
-        payout_address TEXT NOT NULL,
-        details TEXT,
-        status TEXT DEFAULT 'Pending',
-        admin_notes TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
+  const tables = [
+    `CREATE TABLE IF NOT EXISTS cards (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT UNIQUE NOT NULL,
+      img TEXT NOT NULL,
+      tag TEXT NOT NULL,
+      glow TEXT NOT NULL,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );`,
+    `CREATE TABLE IF NOT EXISTS card_variants (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      card_id INTEGER REFERENCES cards(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      inr_rate TEXT,
+      usdt_rate TEXT,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );`,
+    `CREATE TABLE IF NOT EXISTS reviews (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      role TEXT DEFAULT 'Customer',
+      avatar_url TEXT,
+      quote TEXT NOT NULL,
+      rating INTEGER DEFAULT 5,
+      trade_type TEXT NOT NULL,
+      proof_image_url TEXT NOT NULL,
+      verified INTEGER DEFAULT 1,
+      region TEXT,
+      gc_received_date TEXT,
+      payment_sent_date TEXT,
+      amount REAL DEFAULT 0,
+      amount_label TEXT DEFAULT '',
+      admin_notes TEXT,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );`,
+    `CREATE TABLE IF NOT EXISTS payouts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      submission_date TEXT NOT NULL,
+      payout_date TEXT NOT NULL,
+      amount TEXT NOT NULL,
+      card_type TEXT NOT NULL,
+      method TEXT NOT NULL,
+      status TEXT DEFAULT 'Completed',
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );`,
+    `CREATE TABLE IF NOT EXISTS appeals (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      phone TEXT NOT NULL,
+      card_type TEXT NOT NULL,
+      email TEXT NOT NULL,
+      payout_address TEXT NOT NULL,
+      details TEXT,
+      status TEXT DEFAULT 'Pending',
+      admin_notes TEXT,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );`
+  ];
 
-    console.log("Checking if D1 seeding is required...");
+  for (const tableSql of tables) {
+    try {
+      await d1.prepare(tableSql).run();
+    } catch (err: any) {
+      console.error("D1 Init table error:", err.message || err);
+    }
+  }
+
+  try {
     const cardCountRes = await d1.prepare("SELECT COUNT(*) as count FROM cards").first();
     if (!cardCountRes || cardCountRes.count === 0) {
       console.log("Seeding cards database in D1...");
@@ -103,25 +108,42 @@ const initD1Db = async (d1: any) => {
       console.log("D1 seeding cards completed.");
     }
   } catch (err: any) {
-    console.error("D1 Init schema error:", err.message || err);
+    console.error("D1 seeding check error:", err.message || err);
   }
 };
 
 function readLocalDb() {
-  if (!fs.existsSync(LOCAL_DB_PATH)) {
-    fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(defaultLocalData, null, 2));
-    return defaultLocalData;
+  const isEdge = typeof globalThis.WebSocketPair !== 'undefined' || process.env.NEXT_RUNTIME === 'edge';
+  if (isEdge || !fs || !fs.existsSync) {
+    if (!memoryDb) memoryDb = JSON.parse(JSON.stringify(defaultLocalData));
+    return memoryDb;
   }
   try {
+    const LOCAL_DB_PATH = path.resolve('database.json');
+    if (!fs.existsSync(LOCAL_DB_PATH)) {
+      fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(defaultLocalData, null, 2));
+      return defaultLocalData;
+    }
     const data = fs.readFileSync(LOCAL_DB_PATH, 'utf-8');
     return JSON.parse(data);
   } catch (err) {
-    return defaultLocalData;
+    if (!memoryDb) memoryDb = JSON.parse(JSON.stringify(defaultLocalData));
+    return memoryDb;
   }
 }
 
 function writeLocalDb(data: any) {
-  fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(data, null, 2));
+  const isEdge = typeof globalThis.WebSocketPair !== 'undefined' || process.env.NEXT_RUNTIME === 'edge';
+  if (isEdge || !fs || !fs.writeFileSync) {
+    memoryDb = data;
+    return;
+  }
+  try {
+    const LOCAL_DB_PATH = path.resolve('database.json');
+    fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(data, null, 2));
+  } catch (err) {
+    memoryDb = data;
+  }
 }
 
 let initPromise: Promise<void> | null = null;
