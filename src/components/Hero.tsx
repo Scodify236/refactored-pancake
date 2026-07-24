@@ -17,7 +17,10 @@ export function Hero() {
   }, []);
 
   return (
-    <div className="relative w-full min-h-[100dvh] flex flex-col justify-between md:justify-center md:gap-10 py-12 md:py-0 px-4 sm:px-8 overflow-hidden select-none isolate">
+    <div 
+      className="relative w-full min-h-[100dvh] flex flex-col justify-between md:justify-center md:gap-10 pb-12 px-4 sm:px-8 overflow-hidden select-none isolate"
+      style={{ paddingTop: "clamp(140px, 15vh, 220px)" }}
+    >
       <style>{`
         .hero-title {
           color: var(--foreground);
@@ -121,7 +124,7 @@ export function Hero() {
       </div>
 
       {/* ── Header ── */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center order-1 mt-24 sm:mt-0 pointer-events-none w-full">
+      <div className="relative z-10 flex flex-col items-center justify-center text-center order-1 pointer-events-none w-full">
         <h1 className="hero-title flex flex-row items-center justify-center gap-2.5 sm:gap-4 lg:gap-6 px-1 py-2 w-full flex-wrap text-[3.2rem] xs:text-[3.6rem] sm:text-7xl md:text-8xl lg:text-9xl leading-[1.02]">
           <span className="font-serif italic font-medium">Exchange</span>
           <span className="font-sans font-extrabold tracking-tighter">Gift Cards.</span>
