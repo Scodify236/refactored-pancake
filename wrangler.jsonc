@@ -9,5 +9,12 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gcx-db",
+      "database_id": "d1-db-id-placeholder"
+    }
+  ]
 }
