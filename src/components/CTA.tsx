@@ -10,12 +10,12 @@ export function CTA() {
 
           {/* 3D Decorative Floating Cards (peeking from edges) */}
           <img 
-            src="https://scodify236.github.io/refactored-pancake/public/card-amazon-pkV6XfjL.png" 
+            src="https://i.ibb.co/gM6BKCBg/x.png" 
             alt="Amazon Card Deco" 
             className="absolute -left-12 top-10 h-40 w-auto object-contain opacity-20 blur-[1px] hidden lg:block select-none pointer-events-none animate-float-left"
           />
           <img 
-            src="https://scodify236.github.io/refactored-pancake/public/card-roblox-Cn_R-R5S.png" 
+            src="https://i.ibb.co/Z1zbFcPm/x.png" 
             alt="Roblox Card Deco" 
             className="absolute -right-14 bottom-8 h-40 w-auto object-contain opacity-25 blur-[1px] hidden lg:block select-none pointer-events-none animate-float-right"
           />
