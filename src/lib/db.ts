@@ -1,12 +1,12 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 const HARDCODED_CARDS = [
-  { id: 1, name: "Amazon", img: "https://scodify236.github.io/refactored-pancake/public/card-amazon-pkV6XfjL.png", tag: "Shopping", glow: "rgba(255, 153, 0, 0.4)" },
-  { id: 2, name: "Flipkart", img: "https://scodify236.github.io/refactored-pancake/public/card-flipkart-SeEfOOvb.png", tag: "Shopping", glow: "rgba(40, 116, 240, 0.4)" },
-  { id: 3, name: "Roblox", img: "https://scodify236.github.io/refactored-pancake/public/card-roblox-Cn_R-R5S.png", tag: "Gaming", glow: "rgba(239, 68, 68, 0.4)" },
-  { id: 4, name: "League of Legends", img: "https://scodify236.github.io/refactored-pancake/public/card-lol-eD770gql.png", tag: "Gaming", glow: "rgba(197, 168, 128, 0.35)" },
-  { id: 5, name: "Overwatch 2", img: "https://scodify236.github.io/refactored-pancake/public/overwatch2.png", tag: "Gaming", glow: "rgba(240, 100, 20, 0.4)" },
-  { id: 6, name: "Sea of Thieves", img: "https://scodify236.github.io/refactored-pancake/public/sot.png", tag: "Gaming", glow: "rgba(16, 185, 129, 0.4)" }
+  { id: 1, name: "Amazon", img: "https://i.ibb.co/gM6BKCBg/x.png", tag: "Shopping", glow: "rgba(255, 153, 0, 0.4)" },
+  { id: 2, name: "Flipkart", img: "https://i.ibb.co/RT6qYzq7/x.png", tag: "Shopping", glow: "rgba(40, 116, 240, 0.4)" },
+  { id: 3, name: "Roblox", img: "https://i.ibb.co/Z1zbFcPm/x.png", tag: "Gaming", glow: "rgba(239, 68, 68, 0.4)" },
+  { id: 4, name: "League of Legends", img: "https://i.ibb.co/KptqYCY1/x.png", tag: "Gaming", glow: "rgba(197, 168, 128, 0.35)" },
+  { id: 5, name: "Overwatch 2", img: "https://i.ibb.co/39ScbGMw/x.png", tag: "Gaming", glow: "rgba(240, 100, 20, 0.4)" },
+  { id: 6, name: "Sea of Thieves", img: "https://i.ibb.co/wNVjKjC3/x.png", tag: "Gaming", glow: "rgba(16, 185, 129, 0.4)" }
 ];
 
 const initD1Db = async (d1: any) => {
