@@ -1,12 +1,12 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 const HARDCODED_CARDS = [
-  { id: 1, name: "Amazon", img: "amazon", tag: "Shopping", glow: "rgba(255, 153, 0, 0.4)" },
-  { id: 2, name: "Flipkart", img: "flipkart", tag: "Shopping", glow: "rgba(40, 116, 240, 0.4)" },
-  { id: 3, name: "Roblox", img: "roblox", tag: "Gaming", glow: "rgba(239, 68, 68, 0.4)" },
-  { id: 4, name: "League of Legends", img: "lol", tag: "Gaming", glow: "rgba(197, 168, 128, 0.35)" },
-  { id: 5, name: "Overwatch 2", img: "overwatch", tag: "Gaming", glow: "rgba(240, 100, 20, 0.4)" },
-  { id: 6, name: "Sea of Thieves", img: "sot", tag: "Gaming", glow: "rgba(16, 185, 129, 0.4)" }
+  { id: 1, name: "Amazon", img: "https://scodify236.github.io/refactored-pancake/public/card-amazon-pkV6XfjL.png", tag: "Shopping", glow: "rgba(255, 153, 0, 0.4)" },
+  { id: 2, name: "Flipkart", img: "https://scodify236.github.io/refactored-pancake/public/card-flipkart-SeEfOOvb.png", tag: "Shopping", glow: "rgba(40, 116, 240, 0.4)" },
+  { id: 3, name: "Roblox", img: "https://scodify236.github.io/refactored-pancake/public/card-roblox-Cn_R-R5S.png", tag: "Gaming", glow: "rgba(239, 68, 68, 0.4)" },
+  { id: 4, name: "League of Legends", img: "https://scodify236.github.io/refactored-pancake/public/card-lol-eD770gql.png", tag: "Gaming", glow: "rgba(197, 168, 128, 0.35)" },
+  { id: 5, name: "Overwatch 2", img: "https://scodify236.github.io/refactored-pancake/public/overwatch2.png", tag: "Gaming", glow: "rgba(240, 100, 20, 0.4)" },
+  { id: 6, name: "Sea of Thieves", img: "https://scodify236.github.io/refactored-pancake/public/sot.png", tag: "Gaming", glow: "rgba(16, 185, 129, 0.4)" }
 ];
 
 const initD1Db = async (d1: any) => {
@@ -58,6 +58,15 @@ const initD1Db = async (d1: any) => {
       status TEXT DEFAULT 'Pending',
       admin_notes TEXT,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP
+    );`,
+    `CREATE TABLE IF NOT EXISTS sessions (
+      token TEXT PRIMARY KEY,
+      email TEXT NOT NULL,
+      expires_at INTEGER NOT NULL
+    );`,
+    `CREATE TABLE IF NOT EXISTS otps (
+      code TEXT PRIMARY KEY,
+      expires_at INTEGER NOT NULL
     );`
   ];
 
@@ -85,6 +94,45 @@ const ensureDb = async () => {
 };
 
 export const db = {
+  // OTP Management
+  getOtp: async () => {
+    const d1 = await ensureDb();
+    const res = await d1.prepare("SELECT * FROM otps LIMIT 1").first();
+    if (res) {
+      return { code: res.code as string, expiresAt: Number(res.expires_at) };
+    }
+    return null;
+  },
+
+  setOtp: async (otp: { code: string; expiresAt: number } | null) => {
+    const d1 = await ensureDb();
+    await d1.prepare("DELETE FROM otps").run();
+    if (otp) {
+      await d1.prepare("INSERT INTO otps (code, expires_at) VALUES (?, ?)").bind(otp.code, otp.expiresAt).run();
+    }
+  },
+
+  // Session Management
+  getSession: async (token: string) => {
+    const d1 = await ensureDb();
+    const res = await d1.prepare("SELECT * FROM sessions WHERE token = ?").bind(token).first();
+    if (res) {
+      return { token: res.token as string, email: res.email as string, expiresAt: Number(res.expires_at) };
+    }
+    return null;
+  },
+
+  createSession: async (token: string, email: string, expiresAt: number) => {
+    const d1 = await ensureDb();
+    await d1.prepare("DELETE FROM sessions").run();
+    await d1.prepare("INSERT INTO sessions (token, email, expires_at) VALUES (?, ?, ?)").bind(token, email, expiresAt).run();
+  },
+
+  deleteSession: async (token: string) => {
+    const d1 = await ensureDb();
+    await d1.prepare("DELETE FROM sessions WHERE token = ?").bind(token).run();
+  },
+
   getCards: async () => {
     const d1 = await ensureDb();
     const variantsRes = await d1.prepare("SELECT * FROM card_variants").all();

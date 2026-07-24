@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 import { authenticateAdmin, getMailTransporter } from '@/lib/api-helper';
 
 export async function GET(req: Request) {
-  const auth = authenticateAdmin(req);
+  const auth = await authenticateAdmin(req);
   if (!auth.authenticated) {
     return NextResponse.json({ error: auth.error }, { status: auth.status });
   }

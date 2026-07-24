@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { authStore } from './auth-store';
+import { db } from './db';
 
 export const parseUserAgent = (ua: string | null) => {
   if (!ua) return { os: 'Unknown OS', browser: 'Unknown Browser' };
@@ -38,18 +38,17 @@ export const getMailTransporter = async () => {
   });
 };
 
-export const authenticateAdmin = (req: Request) => {
+export const authenticateAdmin = async (req: Request) => {
   const authHeader = req.headers.get('authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return { authenticated: false, error: 'Unauthorized. Missing token.', status: 401 };
   }
 
   const token = authHeader.split(' ')[1];
-  const sessions = authStore.getSessions();
-  const session = sessions.get(token);
+  const session = await db.getSession(token);
 
   if (!session || Date.now() > session.expiresAt) {
-    if (session) sessions.delete(token);
+    if (session) await db.deleteSession(token);
     return { authenticated: false, error: 'Session expired or invalid token.', status: 401 };
   }
 

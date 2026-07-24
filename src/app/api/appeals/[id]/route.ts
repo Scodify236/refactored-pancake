@@ -6,7 +6,7 @@ export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = authenticateAdmin(req);
+  const auth = await authenticateAdmin(req);
   if (!auth.authenticated) {
     return NextResponse.json({ error: auth.error }, { status: auth.status });
   }
@@ -248,7 +248,7 @@ export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = authenticateAdmin(req);
+  const auth = await authenticateAdmin(req);
   if (!auth.authenticated) {
     return NextResponse.json({ error: auth.error }, { status: auth.status });
   }

@@ -1,5 +1,4 @@
-import { NextResponse } from 'next/server';
-import { authStore } from '@/lib/auth-store';
+import { db } from '@/lib/db';
 
 export async function GET(req: Request) {
   const authHeader = req.headers.get('authorization');
@@ -8,11 +7,10 @@ export async function GET(req: Request) {
   }
 
   const token = authHeader.split(' ')[1];
-  const sessions = authStore.getSessions();
-  const session = sessions.get(token);
+  const session = await db.getSession(token);
 
   if (!session || Date.now() > session.expiresAt) {
-    if (session) sessions.delete(token);
+    if (session) await db.deleteSession(token);
     return NextResponse.json({ valid: false, error: 'Session invalid or expired' }, { status: 401 });
   }
 

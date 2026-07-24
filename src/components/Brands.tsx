@@ -5,16 +5,7 @@
 import * as React from "react"
 import { ChevronDown, ChevronUp, X, TrendingUp, DollarSign, Wallet, Loader2 } from "lucide-react"
 
-const imgMap: Record<string, string> = {
-  amazon: "/card-amazon-pkV6XfjL.png",
-  flipkart: "/card-flipkart-SeEfOOvb.png",
-  roblox: "/card-roblox-Cn_R-R5S.png",
-  lol: "/card-lol-eD770gql.png",
-  overwatch: "/overwatch2.png",
-  sot: "/sot.png",
-}
 
-const getCardImage = (imgSrc: string) => imgMap[imgSrc.toLowerCase()] || imgSrc
 
 interface Variant {
   id?: string | number
@@ -126,7 +117,7 @@ export function Brands() {
                     {/* Centered Graphic Container */}
                     <div className="h-56 w-full flex items-center justify-center mb-6 bg-gradient-to-b from-foreground/[0.01] to-foreground/[0.03] rounded-2xl border border-border/30 p-4">
                       <img
-                        src={getCardImage(b.img)}
+                        src={b.img}
                         alt={`${b.name} gift card`}
                         loading="lazy"
                         className="max-h-full w-auto object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-110"

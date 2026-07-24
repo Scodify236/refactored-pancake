@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { parseUserAgent, getMailTransporter } from '@/lib/api-helper';
-import { authStore } from '@/lib/auth-store';
+import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  authStore.setOtp({ code: otp, expiresAt: Date.now() + 3600000 }); // Valid for 1 hour
+  await db.setOtp({ code: otp, expiresAt: Date.now() + 3600000 }); // Valid for 1 hour
 
   console.log("-----------------------------------------");
   console.log(`[AUTH] Generated OTP: ${otp} (Expires: ${new Date(Date.now() + 3600000).toLocaleTimeString()})`);
