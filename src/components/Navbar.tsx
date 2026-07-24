@@ -21,6 +21,15 @@ export function Navbar() {
   return (
     <header className="fixed top-0 inset-x-0 z-50">
       <div className="mx-auto mt-4 max-w-6xl px-4 flex flex-col gap-2">
+        {/* Rebranding Announcement Banner */}
+        <div className="w-full bg-gradient-to-r from-amber-500/10 via-primary/20 to-amber-500/10 border border-primary/25 rounded-full px-5 py-2 text-center text-[10.5px] sm:text-xs font-sans font-medium text-foreground/90 shadow-md backdrop-blur-md flex items-center justify-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+          </span>
+          <span>Rebranding Notice: <strong>GCX</strong> is renaming to <strong>GCVX</strong> over the next 2 months. Payout processing remains fully active.</span>
+        </div>
+
         <nav className="liquid-glass flex items-center justify-between rounded-full px-6 py-2.5">
           <Link to="/" className="flex items-center gap-2">
             <img src="/logo.png" alt="GCX Logo" className="h-8 w-auto object-contain" />
