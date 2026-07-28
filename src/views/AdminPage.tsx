@@ -661,7 +661,7 @@ export function AdminPage() {
       for (const file of files) {
         const formData = new FormData()
         formData.append("file", file)
-        const res = await fetch("https://veltrixcode-vscode.hf.space/upload", {
+        const res = await fetch("https://little-mountain-b93d.na0911830.workers.dev/upload", {
           method: "POST",
           body: formData
         })
@@ -981,11 +981,10 @@ export function AdminPage() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative px-4 py-2 rounded-full text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0 z-10 ${
-                        activeTab === tab.id
+                      className={`relative px-4 py-2 rounded-full text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0 z-10 ${activeTab === tab.id
                           ? "text-primary font-semibold bg-primary/10 border border-primary/20"
                           : "text-muted-foreground hover:text-primary border border-transparent bg-transparent"
-                      }`}
+                        }`}
                     >
                       <Icon size={13} /> {tab.label}
                     </button>
@@ -1057,11 +1056,10 @@ export function AdminPage() {
                 <span className="text-2xl sm:text-3xl font-black font-display text-foreground tracking-tight">
                   {appeals.filter(a => a.status === "Pending" || !a.status).length}
                 </span>
-                <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-[4px] border ${
-                  appeals.filter(a => a.status === "Pending" || !a.status).length > 0
+                <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-[4px] border ${appeals.filter(a => a.status === "Pending" || !a.status).length > 0
                     ? "text-negative bg-negative/5 border-negative/15 animate-pulse"
                     : "text-muted-foreground bg-foreground/[0.04] border-border"
-                }`}>
+                  }`}>
                   TICKETS
                 </span>
               </div>
@@ -1411,11 +1409,10 @@ export function AdminPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => setPayoutFormMode("single")}
-                        className={`h-7 px-3 py-1 rounded-full text-[10px] font-bold transition-all duration-300 cursor-pointer ${
-                          payoutFormMode === "single"
+                        className={`h-7 px-3 py-1 rounded-full text-[10px] font-bold transition-all duration-300 cursor-pointer ${payoutFormMode === "single"
                             ? "bg-primary/20 text-primary"
                             : "text-muted-foreground hover:text-foreground"
-                        }`}
+                          }`}
                       >
                         Single Run
                       </Button>
@@ -1423,11 +1420,10 @@ export function AdminPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => setPayoutFormMode("batch")}
-                        className={`h-7 px-3 py-1 rounded-full text-[10px] font-bold transition-all duration-300 cursor-pointer ${
-                          payoutFormMode === "batch"
+                        className={`h-7 px-3 py-1 rounded-full text-[10px] font-bold transition-all duration-300 cursor-pointer ${payoutFormMode === "batch"
                             ? "bg-primary/20 text-primary"
                             : "text-muted-foreground hover:text-foreground"
-                        }`}
+                          }`}
                       >
                         Batch Timelines
                       </Button>
@@ -1447,7 +1443,7 @@ export function AdminPage() {
                               className="bg-foreground/[0.02] text-muted-foreground font-mono"
                             />
                           </div>
-                          
+
                           <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
                               <Label className="text-[10px] font-mono font-bold uppercase text-muted-foreground">Submission Date</Label>
@@ -1557,8 +1553,8 @@ export function AdminPage() {
                         </form>
                       </div>
                     )}
-                    </CardContent>
-                  </Card>
+                  </CardContent>
+                </Card>
               </div>
 
               {/* List of logged payout schedules */}
@@ -1768,11 +1764,10 @@ export function AdminPage() {
                                 key={reg}
                                 type="button"
                                 onClick={() => setAdminNewRegion(reg === 'None' ? '' : reg)}
-                                className={`flex-1 py-2 rounded-xl border font-mono text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 ${
-                                  (reg === 'None' ? !adminNewRegion : adminNewRegion === reg)
+                                className={`flex-1 py-2 rounded-xl border font-mono text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 ${(reg === 'None' ? !adminNewRegion : adminNewRegion === reg)
                                     ? 'bg-primary/20 text-primary border-primary/50 shadow-[0_0_12px_rgba(14,165,233,0.1)] font-extrabold'
                                     : 'bg-foreground/[0.02] text-muted-foreground border-border/80 hover:bg-foreground/[0.04]'
-                                }`}
+                                  }`}
                               >
                                 {reg === 'US' ? '🇺🇸 US' : reg === 'UK' ? '🇬🇧 UK' : '❌ None'}
                               </button>
@@ -1819,11 +1814,10 @@ export function AdminPage() {
                             >
                               <Star
                                 size={18}
-                                className={`${
-                                  star <= adminNewRating
+                                className={`${star <= adminNewRating
                                     ? "fill-[var(--primary)] text-[var(--primary)]"
                                     : "text-muted-foreground/35"
-                                } transition-all duration-200`}
+                                  } transition-all duration-200`}
                               />
                             </button>
                           ))}
@@ -2104,11 +2098,10 @@ export function AdminPage() {
                                     >
                                       <Star
                                         size={16}
-                                        className={`${
-                                          star <= editingReviewRating
+                                        className={`${star <= editingReviewRating
                                             ? "fill-[var(--primary)] text-[var(--primary)]"
                                             : "text-muted-foreground/45"
-                                        }`}
+                                          }`}
                                       />
                                     </button>
                                   ))}
@@ -2213,11 +2206,10 @@ export function AdminPage() {
                                       <p className="text-[8px] font-bold font-mono uppercase tracking-wider text-muted-foreground mb-2">
                                         Verification Certificate{proofUrls.length > 1 ? "s" : ""}
                                       </p>
-                                      <div className={`grid gap-1.5 ${
-                                        proofUrls.length === 1 ? "grid-cols-1" :
-                                        proofUrls.length === 2 ? "grid-cols-2" :
-                                        "grid-cols-3"
-                                      }`}>
+                                      <div className={`grid gap-1.5 ${proofUrls.length === 1 ? "grid-cols-1" :
+                                          proofUrls.length === 2 ? "grid-cols-2" :
+                                            "grid-cols-3"
+                                        }`}>
                                         {proofUrls.slice(0, proofUrls.length <= 3 ? proofUrls.length : 2).map((url: string, i: number) => (
                                           <button
                                             key={i}
@@ -2283,11 +2275,10 @@ export function AdminPage() {
                                   </div>
                                   <div className="flex items-center gap-1.5">
                                     {review.region && (
-                                      <span className={`text-[8px] font-black font-mono uppercase tracking-wider rounded-full px-2 py-0.5 border ${
-                                        review.region === 'US'
+                                      <span className={`text-[8px] font-black font-mono uppercase tracking-wider rounded-full px-2 py-0.5 border ${review.region === 'US'
                                           ? 'text-sky-400 bg-sky-500/10 border-sky-500/20'
                                           : 'text-rose-400 bg-rose-500/10 border-rose-500/20'
-                                      }`}>
+                                        }`}>
                                         {review.region === 'US' ? '🇺🇸 US' : '🇬🇧 UK'}
                                       </span>
                                     )}
@@ -2331,20 +2322,18 @@ export function AdminPage() {
                       key={tab.label}
                       type="button"
                       onClick={() => setAppealFilterStatus(tab.label)}
-                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 border bg-transparent ${
-                        appealFilterStatus === tab.label
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 border bg-transparent ${appealFilterStatus === tab.label
                           ? "bg-primary/15 border-primary/30 text-primary"
                           : "bg-foreground/[0.01] border-border text-muted-foreground hover:text-foreground hover:bg-foreground/[0.03]"
-                      }`}
+                        }`}
                     >
                       <span>{tab.label}</span>
-                      <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full ${
-                        appealFilterStatus === tab.label
+                      <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full ${appealFilterStatus === tab.label
                           ? "bg-primary/10 text-primary"
                           : tab.count > 0
-                          ? (tab.color?.replace("rounded-md", "rounded-full") || "text-foreground bg-foreground/10 border-border rounded-full")
-                          : "text-muted-foreground bg-foreground/[0.04] border-transparent rounded-full"
-                      }`}>
+                            ? (tab.color?.replace("rounded-md", "rounded-full") || "text-foreground bg-foreground/10 border-border rounded-full")
+                            : "text-muted-foreground bg-foreground/[0.04] border-transparent rounded-full"
+                        }`}>
                         {tab.count}
                       </span>
                     </button>
@@ -2374,10 +2363,10 @@ export function AdminPage() {
                     ))}
                   </div>
                 ) : appeals.filter(a => {
-                    if (appealFilterStatus === "All") return true
-                    if (appealFilterStatus === "Pending") return a.status === "Pending" || !a.status
-                    return a.status === appealFilterStatus
-                  }).length === 0 ? (
+                  if (appealFilterStatus === "All") return true
+                  if (appealFilterStatus === "Pending") return a.status === "Pending" || !a.status
+                  return a.status === appealFilterStatus
+                }).length === 0 ? (
                   <div className="text-center py-12 text-xs text-muted-foreground border border-dashed border-border rounded-xl">
                     No active appeals found matching status: <strong className="text-primary">{appealFilterStatus}</strong>
                   </div>
@@ -2397,15 +2386,14 @@ export function AdminPage() {
                             key={appeal.id}
                             className="liquid-glass rounded-2xl p-5 sm:p-6 border border-border/60 relative overflow-hidden flex flex-col md:flex-row justify-between gap-6 hover:border-border/80 transition duration-300 text-left bg-card"
                             style={{
-                              borderLeft: `4px solid ${
-                                currentStatus === "Resolved"
+                              borderLeft: `4px solid ${currentStatus === "Resolved"
                                   ? "#10b981"
                                   : currentStatus === "Rejected"
-                                  ? "#ef4444"
-                                  : currentStatus === "Under Investigation"
-                                  ? "#3b82f6"
-                                  : "#f59e0b"
-                              }`
+                                    ? "#ef4444"
+                                    : currentStatus === "Under Investigation"
+                                      ? "#3b82f6"
+                                      : "#f59e0b"
+                                }`
                             }}
                           >
                             <div className="flex-1 space-y-4">
@@ -2500,11 +2488,10 @@ export function AdminPage() {
                                       <button
                                         key={opt.label}
                                         onClick={() => handleUpdateAppealStatus(appeal.id, opt.label)}
-                                        className={`px-2.5 py-1.5 rounded-lg border text-[10px] font-bold transition duration-200 cursor-pointer ${
-                                          isSel
+                                        className={`px-2.5 py-1.5 rounded-lg border text-[10px] font-bold transition duration-200 cursor-pointer ${isSel
                                             ? opt.style + " ring-1 ring-offset-1 ring-offset-background ring-primary/20 scale-102 font-black"
                                             : "bg-foreground/[0.01] border-border/80 text-muted-foreground hover:text-foreground bg-transparent"
-                                        }`}
+                                          }`}
                                       >
                                         {opt.label}
                                       </button>
