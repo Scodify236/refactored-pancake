@@ -1,0 +1,6 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Kouzu icon mark: geometric "K" in red + blue -->
+  <line x1="56" y1="30" x2="56" y2="170" stroke="#E5342F" stroke-width="30" stroke-linecap="round"/>
+  <line x1="56" y1="100" x2="162" y2="32" stroke="#1B4CE0" stroke-width="30" stroke-linecap="round"/>
+  <line x1="56" y1="100" x2="162" y2="168" stroke="#1B4CE0" stroke-width="30" stroke-linecap="round"/>
+</svg>
