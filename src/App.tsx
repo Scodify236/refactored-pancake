@@ -7,7 +7,7 @@ import AdminPage from "./views/AdminPage"
 import PrivacyPage from "./views/PrivacyPage"
 import TermsPage from "./views/TermsPage"
 import SupportPage from "./views/SupportPage"
-
+ 
 export function App() {
   const currentPath = useRouter()
 
