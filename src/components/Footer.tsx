@@ -23,7 +23,7 @@ export function Footer() {
               href="https://kouzu.in" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-red-500 hover:text-red-400 font-extrabold transition"
+              className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-red-500 hover:from-blue-400 hover:to-red-400 font-extrabold transition"
             >
               Kouzu
             </a>
