@@ -20,12 +20,12 @@ export function Footer() {
           <p className="text-xs">
             Designed & Hosted by{" "}
             <a 
-              href="https://coderbauer.in" 
+              href="https://kouzu.in" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-red-500 hover:text-red-400 font-extrabold transition"
             >
-              CoderBauer
+              Kouzu
             </a>
           </p>
         </div>
