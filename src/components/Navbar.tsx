@@ -42,6 +42,7 @@ export function Navbar() {
             <a href={getNavLink("#how")} className="hover:text-foreground transition">How it works</a>
             <a href={getNavLink("#payouts")} className="hover:text-foreground transition">Payouts</a>
             <Link to="/proofs" className="hover:text-foreground transition">Proofs</Link>
+            <Link to="/appeal" className="hover:text-foreground transition">Appeal</Link>
             <a href={getNavLink("#faq")} className="hover:text-foreground transition">FAQ</a>
           </div>
 
@@ -143,6 +144,13 @@ export function Navbar() {
               className="hover:text-foreground transition py-1.5 border-b border-border/10"
             >
               Proofs
+            </Link>
+            <Link 
+              to="/appeal" 
+              onClick={() => setIsOpen(false)}
+              className="hover:text-foreground transition py-1.5 border-b border-border/10"
+            >
+              Appeal
             </Link>
             <a 
               href={getNavLink("#faq")} 
