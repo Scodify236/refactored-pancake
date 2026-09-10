@@ -232,13 +232,13 @@ export function AppealPage() {
                 {/* Extra Details */}
                 <div className="grid gap-2">
                   <Label htmlFor="details" className="text-[10px] font-bold font-mono uppercase tracking-wider text-muted-foreground">
-                    Extra Details & Message (Optional)
+                    Funds, Delay & Other Issues / Extra Details (Optional)
                   </Label>
                   <Textarea
                     id="details"
                     value={details}
                     onChange={(e) => setDetails(e.target.value)}
-                    placeholder="Enter card batch details, times, or any context regarding the delay..."
+                    placeholder="Describe any issues regarding your funds, delays, card batch details, transaction times, or other concerns..."
                     rows={4}
                   />
                 </div>
