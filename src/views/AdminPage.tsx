@@ -362,16 +362,21 @@ export function AdminPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" }
       })
-      const data = await res.json()
-      if (res.ok && data.success) {
+      let data: any = {}
+      try {
+        data = await res.json()
+      } catch {
+        // Fallback if response is plain text or HTML error page
+      }
+      if (res.ok && data?.success) {
         setOtpSent(true)
         toast.success(data.message || "Verification code sent to email.")
       } else {
-        toast.error(data.error || "Failed to send OTP.")
+        toast.error(data?.error || `Failed to send OTP (${res.status}).`)
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
-      toast.error("Failed to connect to backend server.")
+      toast.error(err?.message || "Failed to connect to backend server.")
     } finally {
       setAuthLoading(false)
     }
@@ -387,19 +392,24 @@ export function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ otp: otp.trim() })
       })
-      const data = await res.json()
-      if (res.ok && data.success) {
+      let data: any = {}
+      try {
+        data = await res.json()
+      } catch {
+        // Fallback if response is plain text or HTML error page
+      }
+      if (res.ok && data?.success) {
         localStorage.setItem("adminToken", data.token)
         localStorage.setItem("adminTokenExpiry", data.expiresAt.toString())
         setToken(data.token)
         setIsAuthenticated(true)
         toast.success("Authenticated successfully!")
       } else {
-        toast.error(data.error || "Invalid or expired OTP code.")
+        toast.error(data?.error || `Invalid or expired OTP code (${res.status}).`)
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
-      toast.error("Error verifying code.")
+      toast.error(err?.message || "Error verifying code.")
     } finally {
       setAuthLoading(false)
     }

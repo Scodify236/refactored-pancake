@@ -79,24 +79,37 @@ const initD1Db = async (d1: any) => {
   }
 };
 
+// Local memory fallback for local dev when D1 context is unavailable
+const memoryStore = {
+  otp: null as { code: string; expiresAt: number } | null,
+  sessions: new Map<string, { token: string; email: string; expiresAt: number }>(),
+};
+
 let initPromise: Promise<void> | null = null;
 const ensureDb = async () => {
-  const context = getCloudflareContext();
-  const d1 = context?.env?.DB;
-  if (!d1) {
-    throw new Error("Cloudflare D1 DB binding 'DB' not found in env context.");
+  try {
+    const context = getCloudflareContext();
+    const d1 = context?.env?.DB;
+    if (d1) {
+      if (!initPromise) {
+        initPromise = initD1Db(d1);
+      }
+      await initPromise;
+      return d1;
+    }
+  } catch (e) {
+    // getCloudflareContext not available in local dev without proxy
   }
-  if (!initPromise) {
-    initPromise = initD1Db(d1);
-  }
-  await initPromise;
-  return d1;
+  return null;
 };
 
 export const db = {
   // OTP Management
   getOtp: async () => {
     const d1 = await ensureDb();
+    if (!d1) {
+      return memoryStore.otp;
+    }
     const res = await d1.prepare("SELECT * FROM otps LIMIT 1").first();
     if (res) {
       return { code: res.code as string, expiresAt: Number(res.expires_at) };
@@ -106,6 +119,10 @@ export const db = {
 
   setOtp: async (otp: { code: string; expiresAt: number } | null) => {
     const d1 = await ensureDb();
+    if (!d1) {
+      memoryStore.otp = otp;
+      return;
+    }
     await d1.prepare("DELETE FROM otps").run();
     if (otp) {
       await d1.prepare("INSERT INTO otps (code, expires_at) VALUES (?, ?)").bind(otp.code, otp.expiresAt).run();
@@ -115,6 +132,9 @@ export const db = {
   // Session Management
   getSession: async (token: string) => {
     const d1 = await ensureDb();
+    if (!d1) {
+      return memoryStore.sessions.get(token) || null;
+    }
     const res = await d1.prepare("SELECT * FROM sessions WHERE token = ?").bind(token).first();
     if (res) {
       return { token: res.token as string, email: res.email as string, expiresAt: Number(res.expires_at) };
@@ -124,12 +144,20 @@ export const db = {
 
   createSession: async (token: string, email: string, expiresAt: number) => {
     const d1 = await ensureDb();
+    if (!d1) {
+      memoryStore.sessions.set(token, { token, email, expiresAt });
+      return;
+    }
     await d1.prepare("DELETE FROM sessions").run();
     await d1.prepare("INSERT INTO sessions (token, email, expires_at) VALUES (?, ?, ?)").bind(token, email, expiresAt).run();
   },
 
   deleteSession: async (token: string) => {
     const d1 = await ensureDb();
+    if (!d1) {
+      memoryStore.sessions.delete(token);
+      return;
+    }
     await d1.prepare("DELETE FROM sessions WHERE token = ?").bind(token).run();
   },
 
