@@ -142,9 +142,9 @@ export async function POST(req: Request) {
                 </tr>
                 <tr>
                   <td align="center" style="padding-bottom: 12px;">
-                    <a href="http://localhost:3000/privacy" style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 12px; font-weight: 500; color: #a1a1aa; text-decoration: none; margin: 0 10px;">Privacy</a>
-                    <a href="http://localhost:3000/terms" style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 12px; font-weight: 500; color: #a1a1aa; text-decoration: none; margin: 0 10px;">Terms</a>
-                    <a href="http://localhost:3000/support" style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 12px; font-weight: 500; color: #a1a1aa; text-decoration: none; margin: 0 10px;">Support</a>
+                    <a href="https://gcxchange.com/privacy" style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 12px; font-weight: 500; color: #a1a1aa; text-decoration: none; margin: 0 10px;">Privacy</a>
+                    <a href="https://gcxchange.com/terms" style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 12px; font-weight: 500; color: #a1a1aa; text-decoration: none; margin: 0 10px;">Terms</a>
+                    <a href="https://gcxchange.com/support" style="font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 12px; font-weight: 500; color: #a1a1aa; text-decoration: none; margin: 0 10px;">Support</a>
                   </td>
                 </tr>
                 <tr>
