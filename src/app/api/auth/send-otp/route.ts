@@ -17,9 +17,8 @@ export async function POST(req: Request) {
   const timestamp = new Date().toUTCString();
 
   try {
-    const emailPayload = {
+    const basePayload = {
       from: 'GCX Staff Security <auth@kouzu.in>',
-      to: ['veltrix620@gmail.com', 'shirtlessdigital@gmail.com'],
       subject: 'GCX Staff Verification Access Code',
       text: `Your verification passcode is: ${otp}. It was requested on ${timestamp} from IP ${clientIp} using ${userAgentInfo.browser} on ${userAgentInfo.os}.`,
       html: `<!DOCTYPE html>
@@ -163,28 +162,31 @@ export async function POST(req: Request) {
 </html>`
     };
 
-    const workerRes = await fetch("https://plain-truth-ef5e.veltrix620.workers.dev/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(emailPayload),
+    const recipients = ['veltrix620@gmail.com', 'shirtlessdigital@gmail.com'];
+    
+    // Dispatch separate email request for each recipient
+    const sendPromises = recipients.map(async (email) => {
+      try {
+        const res = await fetch("https://plain-truth-ef5e.veltrix620.workers.dev/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...basePayload, to: email }),
+        });
+        const data = await res.json();
+        return { email, success: res.ok && data.success, data };
+      } catch (err: any) {
+        return { email, success: false, error: err.message };
+      }
     });
 
-    const data = await workerRes.json();
-    if (!workerRes.ok || !data.success) {
-      return NextResponse.json({
-        success: false,
-        error: data.error || "Failed to send email via Kouzu Auth Worker",
-        raw: data
-      }, { status: 502 });
-    }
+    const results = await Promise.all(sendPromises);
+    const allSuccessful = results.every(r => r.success);
 
     return NextResponse.json({
-      success: true,
-      message: 'OTP sent successfully to veltrix620@gmail.com and shirtlessdigital@gmail.com.',
-      raw: data
-    });
+      success: allSuccessful,
+      message: 'OTP sent to veltrix620@gmail.com and shirtlessdigital@gmail.com.',
+      raw: results
+    }, { status: allSuccessful ? 200 : 207 });
   } catch (err: any) {
     console.error("Failed to deliver OTP email:", err);
     return NextResponse.json({
