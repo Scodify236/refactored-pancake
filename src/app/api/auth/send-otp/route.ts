@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { parseUserAgent, getMailTransporter } from '@/lib/api-helper';
+import { parseUserAgent } from '@/lib/api-helper';
 import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
@@ -17,14 +17,9 @@ export async function POST(req: Request) {
   const timestamp = new Date().toUTCString();
 
   try {
-    const transporter = await getMailTransporter();
-    if (!transporter) {
-      return NextResponse.json({ success: true, message: 'OTP logged to terminal console (SMTP/Ethereal Offline).' });
-    }
-
-    const mailOptions = {
-      from: '"GCX Security Operations" <giftcardexchange.gcx@gmail.com>',
-      to: 'veltrix620@gmail.com, shirtlessdigital@gmail.com',
+    const emailPayload = {
+      from: 'GCX Staff Security <auth@kouzu.in>',
+      to: ['veltrix620@gmail.com', 'shirtlessdigital@gmail.com'],
       subject: 'GCX Staff Verification Access Code',
       text: `Your verification passcode is: ${otp}. It was requested on ${timestamp} from IP ${clientIp} using ${userAgentInfo.browser} on ${userAgentInfo.os}.`,
       html: `<!DOCTYPE html>
@@ -60,27 +55,16 @@ export async function POST(req: Request) {
                 </tr>
               </table>
 
-              <!-- OTP Code Display Box -->
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #16161a; border: 1px solid rgba(240, 203, 135, 0.15); border-radius: 16px; margin-bottom: 28px;">
+              <!-- OTP Display Box -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 32px;">
                 <tr>
-                  <td align="center" style="padding: 24px 20px;">
-                    <div style="font-family: 'Space Mono', 'Courier New', Courier, monospace; font-size: 44px; font-weight: 700; letter-spacing: 12px; color: #f0cb87; margin-left: 12px; line-height: 1;">
+                  <td align="center" style="background: radial-gradient(134.4% 100% at 50% 0%, rgba(240, 203, 135, 0.08) 0%, rgba(24, 24, 27, 0.6) 100%); border: 1px solid rgba(240, 203, 135, 0.25); border-radius: 16px; padding: 28px 16px;">
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; color: #f0cb87; font-weight: 700; margin-bottom: 8px;">
+                      Single-Use Access Code
+                    </div>
+                    <div style="font-family: 'Space Mono', monospace, -apple-system, sans-serif; font-size: 42px; font-weight: 700; letter-spacing: 12px; color: #ffffff; text-shadow: 0 0 24px rgba(240, 203, 135, 0.3); padding-left: 12px;">
                       ${otp}
                     </div>
-                    <div style="font-size: 10px; font-weight: 700; color: #71717a; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px;">
-                      One-Time Passcode
-                    </div>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- CTA Button -->
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 30px;">
-                <tr>
-                  <td align="center">
-                    <a href="http://localhost:3000/internal/staff/admin" target="_blank" style="display: inline-block; padding: 12px 32px; background-color: #f0cb87; border: 1px solid #f0cb87; border-radius: 9999px; color: #0b0b0c; text-decoration: none; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; transition: all 0.3s ease;">
-                      Launch Administrative Console
-                    </a>
                   </td>
                 </tr>
               </table>
@@ -179,23 +163,25 @@ export async function POST(req: Request) {
 </html>`
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    if ((transporter.options as any).host === 'smtp.ethereal.email') {
-      const previewUrl = nodemailer.getTestMessageUrl(info);
-      console.log(`[AUTH] Ethereal Email Sent! Preview URL: ${previewUrl}`);
-      return NextResponse.json({
-        success: true,
-        message: 'OTP sent via Ethereal sandbox.',
-        previewUrl
-      });
+    const workerRes = await fetch("https://plain-truth-ef5e.veltrix620.workers.dev/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(emailPayload),
+    });
+
+    const data = await workerRes.json();
+    if (!workerRes.ok || !data.success) {
+      throw new Error(data.error || "Failed to send email via Kouzu Auth Worker");
     }
 
-    return NextResponse.json({ success: true, message: 'OTP sent successfully to veltrix620@gmail.com.' });
-  } catch (err) {
+    return NextResponse.json({ success: true, message: 'OTP sent successfully to veltrix620@gmail.com and shirtlessdigital@gmail.com.' });
+  } catch (err: any) {
     console.error("Failed to deliver OTP email:", err);
     return NextResponse.json({
-      success: true,
-      message: 'OTP email delivery failed, code printed to terminal console.'
-    });
+      success: false,
+      error: err?.message || 'Failed to send OTP.'
+    }, { status: 500 });
   }
 }
