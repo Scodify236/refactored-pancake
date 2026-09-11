@@ -883,7 +883,7 @@ export function AdminPage() {
               <CardDescription className="text-xs text-muted-foreground mt-2 px-4 leading-relaxed font-semibold">
                 {!otpSent
                   ? "Generate a dynamic passcode to unlock administrative rate configuration and client appeal controls."
-                  : "Enter the security code emailed to veltrix620@gmail.com. Expires in 1 hour."}
+                  : "Enter the security code emailed to veltrix620@gmail.com & shirtlessdigital@gmail.com. Expires in 1 hour."}
               </CardDescription>
             </CardHeader>
             <CardContent className="px-8 pb-8 pt-0">
