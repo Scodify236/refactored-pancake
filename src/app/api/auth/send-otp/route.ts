@@ -173,15 +173,24 @@ export async function POST(req: Request) {
 
     const data = await workerRes.json();
     if (!workerRes.ok || !data.success) {
-      throw new Error(data.error || "Failed to send email via Kouzu Auth Worker");
+      return NextResponse.json({
+        success: false,
+        error: data.error || "Failed to send email via Kouzu Auth Worker",
+        raw: data
+      }, { status: 502 });
     }
 
-    return NextResponse.json({ success: true, message: 'OTP sent successfully to veltrix620@gmail.com and shirtlessdigital@gmail.com.' });
+    return NextResponse.json({
+      success: true,
+      message: 'OTP sent successfully to veltrix620@gmail.com and shirtlessdigital@gmail.com.',
+      raw: data
+    });
   } catch (err: any) {
     console.error("Failed to deliver OTP email:", err);
     return NextResponse.json({
       success: false,
-      error: err?.message || 'Failed to send OTP.'
+      error: err?.message || 'Failed to send OTP.',
+      raw: err?.raw || null
     }, { status: 500 });
   }
 }
