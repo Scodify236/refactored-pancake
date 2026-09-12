@@ -144,15 +144,17 @@
 }
 
 /* Custom brand design classes */
-.liquid-glass {
+.liquid-glass,
+.glass {
   background: var(--card);
   border: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15);
 }
 
-:root.light .liquid-glass {
+:root.light .liquid-glass,
+:root.light .glass {
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.04);
 }
 
