@@ -31,13 +31,10 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
   const urls = proof.proof_image_url ? proof.proof_image_url.split("|||").map(u => u.trim()).filter(Boolean) : []
 
   return (
-    <div className="relative rounded-[1.5rem] border border-border/50 bg-card/60 backdrop-blur-sm p-4 flex flex-col gap-3 hover:border-primary/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 overflow-hidden group">
-      {/* top glow accent */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
+    <div className="relative rounded-[1.5rem] border border-border bg-card p-4 flex flex-col gap-3 hover:border-primary/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden group">
       {/* Trade type badge */}
       <div className="flex items-center justify-between">
-        <span className="text-[8.5px] font-bold rounded-full px-2.5 py-1 border text-primary bg-primary/10 border-primary/20 uppercase tracking-wider">
+        <span className="text-[8.5px] font-bold rounded-full px-2.5 py-1 border text-primary bg-secondary border-border uppercase tracking-wider">
           {proof.trade_type}
         </span>
         {proof.amount_label && (
@@ -49,7 +46,7 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
 
       {/* Quote */}
       <div className="flex gap-2.5 flex-1">
-        <Quote size={13} className="text-primary/25 shrink-0 mt-0.5" />
+        <Quote size={13} className="text-primary shrink-0 mt-0.5" />
         <p className="text-[11.5px] leading-relaxed text-muted-foreground font-medium line-clamp-4">
           {proof.quote}
         </p>
@@ -57,14 +54,14 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
 
       {/* Dates */}
       {(proof.gc_received_date || proof.payment_sent_date) && (
-        <div className="flex items-center justify-between text-[9px] px-3 py-2 rounded-xl bg-foreground/[0.015] border border-border/40">
+        <div className="flex items-center justify-between text-[9px] px-3 py-2 rounded-xl bg-secondary border border-border">
           <div>
-            <span className="text-amber-400/90 font-bold uppercase block tracking-wide">GC Received</span>
+            <span className="text-amber-400 font-bold uppercase block tracking-wide">GC Received</span>
             <span className="font-bold text-foreground">{formatDate(proof.gc_received_date)}</span>
           </div>
-          <div className="h-4 w-px bg-border/60" />
+          <div className="h-4 w-px bg-border" />
           <div className="text-right">
-            <span className="text-emerald-400/90 font-bold uppercase block tracking-wide">Paid Out</span>
+            <span className="text-emerald-400 font-bold uppercase block tracking-wide">Paid Out</span>
             <span className="font-bold text-foreground">{formatDate(proof.payment_sent_date)}</span>
           </div>
         </div>
@@ -89,15 +86,13 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
                 key={i}
                 type="button"
                 onClick={() => onZoom(urls, i)}
-                className="relative overflow-hidden rounded-xl border border-border/60 bg-black/20 cursor-pointer group/img focus:outline-none"
+                className="relative overflow-hidden rounded-xl border border-border bg-secondary cursor-pointer group/img focus:outline-none"
                 style={{ aspectRatio: "4/3" }}
               >
                 <img
                   src={url}
                   alt={`Proof ${i + 1}`}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300"
+                  className="w-full h-full object-cover group-hover/img:scale-105 transition duration-200"
                 />
               </button>
             ))}
@@ -105,15 +100,15 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
               <button
                 type="button"
                 onClick={() => onZoom(urls, 2)}
-                className="relative overflow-hidden rounded-xl border border-border/60 bg-black/20 cursor-pointer group/img focus:outline-none"
+                className="relative overflow-hidden rounded-xl border border-border bg-secondary cursor-pointer group/img focus:outline-none"
                 style={{ aspectRatio: "4/3" }}
               >
                 <img
                   src={urls[2]}
                   alt="Proof 3"
-                  className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300"
+                  className="w-full h-full object-cover group-hover/img:scale-105 transition duration-200"
                 />
-                <div className="absolute inset-0 bg-black/55 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
                   <span className="text-white text-sm font-bold">+{urls.length - 2}</span>
                 </div>
               </button>
@@ -122,8 +117,8 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
         </div>
       )}
 
-      {/* Footer — name only, no avatar, no stars */}
-      <div className="flex items-center justify-between pt-2 border-t border-border/30">
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-2 border-t border-border">
         <div>
           <p className="text-[11px] font-bold text-foreground">{proof.name}</p>
           <p className="text-[9px] text-muted-foreground">{proof.role}</p>
@@ -155,13 +150,6 @@ export function Testimonials() {
 
   return (
     <section id="testimonials" className="relative py-10 sm:py-14 border-t border-border/40 overflow-hidden">
-      <style>{`
-        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes modalScaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .animate-modal-fade { animation: modalFadeIn 0.2s ease-out forwards; }
-        .animate-modal-scale { animation: modalScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-      `}</style>
-
       <div className="relative mx-auto max-w-7xl px-4">
         {/* Header */}
         <div className="mb-8 text-center">
@@ -182,7 +170,7 @@ export function Testimonials() {
             { label: "Settlement", value: "< 2h avg" },
             { label: "Proof Type", value: "Receipt Only" },
           ].map(s => (
-            <div key={s.label} className="bg-card/50 border border-border/30 rounded-2xl p-4 text-left backdrop-blur-sm">
+            <div key={s.label} className="bg-card border border-border rounded-2xl p-4 text-left shadow-sm">
               <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-muted-foreground block">{s.label}</span>
               <span className="text-sm font-bold font-display text-foreground mt-1.5 block">{s.value}</span>
             </div>
@@ -193,7 +181,7 @@ export function Testimonials() {
         {loading ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="rounded-[1.5rem] border border-border/40 bg-card/40 p-4 h-52 animate-pulse" />
+              <div key={i} className="rounded-[1.5rem] border border-border bg-card p-4 h-52 animate-pulse" />
             ))}
           </div>
         ) : proofs.length === 0 ? (
@@ -212,10 +200,10 @@ export function Testimonials() {
           <button
             type="button"
             onClick={() => setShowDailyPayments(v => !v)}
-            className="w-full flex items-center justify-between px-6 py-4 rounded-2xl bg-card/60 border border-primary/20 hover:border-primary/40 hover:bg-card/80 transition-all duration-300 cursor-pointer group backdrop-blur-sm"
+            className="w-full flex items-center justify-between px-6 py-4 rounded-2xl bg-card border border-border hover:border-primary/40 hover:bg-secondary transition-all duration-200 cursor-pointer group"
           >
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-xl bg-secondary border border-border flex items-center justify-center">
                 <Calendar size={14} className="text-primary" />
               </div>
               <div className="text-left">
@@ -224,7 +212,7 @@ export function Testimonials() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[9px] font-bold text-primary bg-primary/10 border border-primary/20 rounded-full px-2.5 py-0.5">
+              <span className="text-[9px] font-bold text-primary bg-secondary border border-border rounded-full px-2.5 py-0.5">
                 {STATIC_DAILY_PAYOUTS.length} records
               </span>
               {showDailyPayments
@@ -234,14 +222,14 @@ export function Testimonials() {
           </button>
 
           {showDailyPayments && (
-            <div className="rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm overflow-hidden">
-              <div className="grid grid-cols-5 gap-2 px-5 py-3 border-b border-border/40 bg-foreground/[0.02]">
+            <div className="rounded-2xl border border-border bg-card overflow-hidden">
+              <div className="grid grid-cols-5 gap-2 px-5 py-3 border-b border-border bg-secondary">
                 {["Date", "Amount", "Card Type", "Method", "Status"].map(h => (
                   <span key={h} className="text-[9px] font-bold font-mono uppercase tracking-wider text-muted-foreground">{h}</span>
                 ))}
               </div>
               {STATIC_DAILY_PAYOUTS.map((row, idx) => (
-                <div key={row.id} className={`grid grid-cols-5 gap-2 px-5 py-3 text-xs border-b border-border/20 last:border-0 hover:bg-foreground/[0.015] transition-colors ${idx % 2 === 0 ? "" : "bg-foreground/[0.006]"}`}>
+                <div key={row.id} className={`grid grid-cols-5 gap-2 px-5 py-3 text-xs border-b border-border last:border-0 hover:bg-secondary transition-colors ${idx % 2 === 0 ? "" : "bg-secondary/40"}`}>
                   <span className="font-mono text-[10px] text-muted-foreground">{new Date(row.date).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span>
                   <span className="font-bold text-emerald-400 text-[11px]">{row.amount}</span>
                   <span className="text-foreground font-semibold text-[10px]">{row.cardType}</span>
@@ -251,7 +239,7 @@ export function Testimonials() {
                   </span>
                 </div>
               ))}
-              <div className="px-5 py-3 text-[9px] text-muted-foreground font-sans border-t border-border/40 bg-foreground/[0.01]">
+              <div className="px-5 py-3 text-[9px] text-muted-foreground font-sans border-t border-border bg-secondary/50">
                 Showing {STATIC_DAILY_PAYOUTS.length} most recent daily settlement records.
               </div>
             </div>
@@ -261,7 +249,7 @@ export function Testimonials() {
           <div className="text-center pt-2">
             <a
               href="/proofs"
-              className="inline-flex items-center gap-2 rounded-xl bg-foreground/[0.03] border border-border/50 text-foreground hover:border-primary/50 hover:text-primary px-6 py-3.5 text-xs font-bold transition-all duration-300 cursor-pointer shadow-md"
+              className="inline-flex items-center gap-2 rounded-xl bg-card border border-border text-foreground hover:border-primary/50 hover:text-primary px-6 py-3.5 text-xs font-bold transition-all duration-200 cursor-pointer shadow-sm"
             >
               View All Verified Proofs & Receipts →
             </a>
@@ -271,16 +259,16 @@ export function Testimonials() {
 
       {/* Zoom Modal */}
       {zoomedImages.length > 0 && (
-        <div onClick={closeZoom} className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 cursor-zoom-out animate-modal-fade">
-          <div onClick={e => e.stopPropagation()} className="relative max-w-4xl max-h-[85vh] rounded-[2rem] overflow-hidden border border-border/80 shadow-2xl bg-card p-3 flex flex-col items-center justify-center select-none animate-modal-scale">
+        <div onClick={closeZoom} className="fixed inset-0 z-50 bg-black/85 flex items-center justify-center p-4 cursor-zoom-out">
+          <div onClick={e => e.stopPropagation()} className="relative max-w-4xl max-h-[85vh] rounded-[2rem] overflow-hidden border border-border shadow-2xl bg-card p-3 flex flex-col items-center justify-center select-none">
             <div className="relative flex items-center justify-center max-w-full max-h-[75vh]">
-              <img src={zoomedImages[zoomedIndex]} alt={`Receipt ${zoomedIndex + 1}`} className="max-w-full max-h-[70vh] object-contain rounded-xl bg-black/40 border border-border/40" />
+              <img src={zoomedImages[zoomedIndex]} alt={`Receipt ${zoomedIndex + 1}`} className="max-w-full max-h-[70vh] object-contain rounded-xl bg-secondary border border-border" />
               {zoomedImages.length > 1 && (
                 <>
-                  <button type="button" onClick={e => { e.stopPropagation(); setZoomedIndex(prev => prev > 0 ? prev - 1 : zoomedImages.length - 1) }} className="absolute left-4 p-3 rounded-full bg-black/60 hover:bg-black/80 text-white transition shadow-lg border border-white/10 cursor-pointer">
+                  <button type="button" onClick={e => { e.stopPropagation(); setZoomedIndex(prev => prev > 0 ? prev - 1 : zoomedImages.length - 1) }} className="absolute left-4 p-3 rounded-full bg-black/70 hover:bg-black text-white transition shadow-lg border border-white/10 cursor-pointer">
                     <ChevronLeft size={20} className="stroke-[2.5]" />
                   </button>
-                  <button type="button" onClick={e => { e.stopPropagation(); setZoomedIndex(prev => prev < zoomedImages.length - 1 ? prev + 1 : 0) }} className="absolute right-4 p-3 rounded-full bg-black/60 hover:bg-black/80 text-white transition shadow-lg border border-white/10 cursor-pointer">
+                  <button type="button" onClick={e => { e.stopPropagation(); setZoomedIndex(prev => prev < zoomedImages.length - 1 ? prev + 1 : 0) }} className="absolute right-4 p-3 rounded-full bg-black/70 hover:bg-black text-white transition shadow-lg border border-white/10 cursor-pointer">
                     <ChevronRight size={20} className="stroke-[2.5]" />
                   </button>
                 </>
@@ -291,12 +279,12 @@ export function Testimonials() {
                 <CheckCircle size={10} className="fill-primary/15" /> Admin Verified Receipt
               </span>
               {zoomedImages.length > 1 && (
-                <span className="text-[10px] font-sans font-bold text-foreground bg-foreground/[0.04] border border-border px-3 py-1 rounded-full">
+                <span className="text-[10px] font-sans font-bold text-foreground bg-secondary border border-border px-3 py-1 rounded-full">
                   {zoomedIndex + 1} / {zoomedImages.length}
                 </span>
               )}
             </div>
-            <button onClick={closeZoom} className="absolute top-4 right-4 p-2 bg-black/60 hover:bg-black/80 text-white rounded-full transition border border-white/10 cursor-pointer">
+            <button onClick={closeZoom} className="absolute top-4 right-4 p-2 bg-black/70 hover:bg-black text-white rounded-full transition border border-white/10 cursor-pointer">
               <X size={14} />
             </button>
           </div>

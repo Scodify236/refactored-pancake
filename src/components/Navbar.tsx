@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Link, useRouter } from "./router"
-import { Menu, X, Sun, Moon, Monitor } from "lucide-react"
+import { Menu, X, Sun, Moon, Monitor, CreditCard, HelpCircle, ShieldAlert, CheckCircle2, ArrowRight } from "lucide-react"
 import { useTheme } from "./theme-provider"
 import {
   DropdownMenu,
@@ -18,11 +18,23 @@ export function Navbar() {
     return currentPath === "/" ? hash : `/${hash}`
   }
 
+  // Prevent background scrolling when sidebar drawer is open
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isOpen])
+
   return (
     <header className="fixed top-0 inset-x-0 z-50">
       <div className="mx-auto mt-4 max-w-6xl px-4 flex flex-col gap-2">
         {/* Rebranding Announcement Banner */}
-        <div className="w-full liquid-glass border border-primary/25 rounded-full px-5 py-2 text-center text-[10.5px] sm:text-xs font-sans font-medium text-foreground/90 shadow-md flex items-center justify-center gap-2">
+        <div className="w-full bg-card border border-primary/30 rounded-full px-5 py-2 text-center text-[10.5px] sm:text-xs font-sans font-medium text-foreground shadow-md flex items-center justify-center gap-2">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
@@ -63,11 +75,11 @@ export function Navbar() {
                   )}
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="liquid-glass border border-border/80 p-1 rounded-2xl w-32 shadow-xl bg-card">
+              <DropdownMenuContent align="end" className="border border-border p-1 rounded-2xl w-32 shadow-xl bg-card">
                 <DropdownMenuItem
                   onClick={() => setTheme("light")}
                   className={`flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-semibold cursor-pointer transition ${
-                    theme === "light" ? "bg-primary text-black" : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04]"
+                    theme === "light" ? "bg-primary text-black" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                   }`}
                 >
                   <Sun size={14} /> Light
@@ -75,7 +87,7 @@ export function Navbar() {
                 <DropdownMenuItem
                   onClick={() => setTheme("dark")}
                   className={`flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-semibold cursor-pointer transition mt-0.5 ${
-                    theme === "dark" ? "bg-primary text-black" : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04]"
+                    theme === "dark" ? "bg-primary text-black" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                   }`}
                 >
                   <Moon size={14} /> Dark
@@ -83,7 +95,7 @@ export function Navbar() {
                 <DropdownMenuItem
                   onClick={() => setTheme("system")}
                   className={`flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-semibold cursor-pointer transition mt-0.5 ${
-                    theme === "system" ? "bg-primary text-black" : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04]"
+                    theme === "system" ? "bg-primary text-black" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                   }`}
                 >
                   <Monitor size={14} /> Auto
@@ -101,69 +113,134 @@ export function Navbar() {
 
             {/* Mobile hamburger menu toggle */}
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setIsOpen(true)}
               className="md:hidden p-2 text-muted-foreground hover:text-foreground focus:outline-none transition cursor-pointer"
-              aria-label="Toggle menu"
+              aria-label="Open menu"
             >
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
+              <Menu size={22} />
             </button>
           </div>
         </nav>
+      </div>
 
-        {/* Mobile menu dropdown */}
-        <div
-          className={`md:hidden liquid-glass rounded-[2rem] p-5 flex flex-col gap-4 border border-border/60 shadow-2xl overflow-hidden transition-all duration-200 transform origin-top ${
-            isOpen ? "opacity-100 scale-100 translate-y-0 visible" : "opacity-0 scale-95 -translate-y-2 pointer-events-none invisible absolute"
+      {/* Mobile Sidebar Overlay & Drawer */}
+      <div 
+        className={`fixed inset-0 z-[100] md:hidden transition-visibility duration-300 ${
+          isOpen ? "visible pointer-events-auto" : "invisible pointer-events-none"
+        }`}
+      >
+        {/* Solid Backdrop */}
+        <div 
+          onClick={() => setIsOpen(false)}
+          className={`absolute inset-0 bg-black/80 transition-opacity duration-300 ${
+            isOpen ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        {/* Sidebar Panel */}
+        <aside 
+          className={`absolute top-0 right-0 bottom-0 w-[290px] max-w-[85vw] bg-card border-l border-border flex flex-col justify-between p-6 shadow-2xl transition-transform duration-300 ease-in-out ${
+            isOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <div className="flex flex-col gap-3.5 text-xs font-semibold text-muted-foreground">
-            <a 
-              href={getNavLink("#brands")} 
-              onClick={() => setIsOpen(false)}
-              className="hover:text-foreground transition py-1.5 border-b border-border/10"
-            >
-              Cards
-            </a>
-            <a 
-              href={getNavLink("#how")} 
-              onClick={() => setIsOpen(false)}
-              className="hover:text-foreground transition py-1.5 border-b border-border/10"
-            >
-              How it works
-            </a>
-            <a 
-              href={getNavLink("#payouts")} 
-              onClick={() => setIsOpen(false)}
-              className="hover:text-foreground transition py-1.5 border-b border-border/10"
-            >
-              Payouts
-            </a>
-            <Link 
-              to="/proofs" 
-              onClick={() => setIsOpen(false)}
-              className="hover:text-foreground transition py-1.5 border-b border-border/10"
-            >
-              Proofs
-            </Link>
-            <Link 
-              to="/appeal" 
-              onClick={() => setIsOpen(false)}
-              className="hover:text-foreground transition py-1.5 border-b border-border/10"
-            >
-              Appeal
-            </Link>
-            <a 
-              href={getNavLink("#faq")} 
-              onClick={() => setIsOpen(false)}
-              className="hover:text-foreground transition py-1.5 border-b border-border/10"
-            >
-              FAQ
-            </a>
-            
-            {/* Mobile Theme Switcher (Segmented Control) */}
-            <div className="flex flex-col gap-1.5 py-1.5 border-b border-border/10">
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold font-sans">Theme</span>
-              <div className="flex items-center bg-foreground/[0.03] border border-border/50 rounded-xl p-1 w-full">
+          {/* Header */}
+          <div>
+            <div className="flex items-center justify-between pb-5 border-b border-border">
+              <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2.5">
+                <img src="/logo.png" alt="GCX Logo" className="h-7 w-auto object-contain" />
+                <span className="text-lg font-bold font-display text-foreground">GCX</span>
+              </Link>
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition"
+                aria-label="Close menu"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Navigation Links */}
+            <nav className="flex flex-col gap-1 mt-6">
+              <a 
+                href={getNavLink("#brands")} 
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between py-3 px-3 rounded-xl text-sm font-semibold text-foreground hover:bg-secondary transition"
+              >
+                <div className="flex items-center gap-3">
+                  <CreditCard size={18} className="text-primary" />
+                  <span>Cards</span>
+                </div>
+                <ArrowRight size={14} className="text-muted-foreground" />
+              </a>
+
+              <a 
+                href={getNavLink("#how")} 
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between py-3 px-3 rounded-xl text-sm font-semibold text-foreground hover:bg-secondary transition"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-primary font-bold text-sm">01</span>
+                  <span>How it works</span>
+                </div>
+                <ArrowRight size={14} className="text-muted-foreground" />
+              </a>
+
+              <a 
+                href={getNavLink("#payouts")} 
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between py-3 px-3 rounded-xl text-sm font-semibold text-foreground hover:bg-secondary transition"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-primary font-bold text-sm">₹</span>
+                  <span>Payouts</span>
+                </div>
+                <ArrowRight size={14} className="text-muted-foreground" />
+              </a>
+
+              <Link 
+                to="/proofs" 
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between py-3 px-3 rounded-xl text-sm font-semibold text-foreground hover:bg-secondary transition"
+              >
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 size={18} className="text-primary" />
+                  <span>Proofs</span>
+                </div>
+                <ArrowRight size={14} className="text-muted-foreground" />
+              </Link>
+
+              <Link 
+                to="/appeal" 
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between py-3 px-3 rounded-xl text-sm font-semibold text-foreground hover:bg-secondary transition"
+              >
+                <div className="flex items-center gap-3">
+                  <ShieldAlert size={18} className="text-primary" />
+                  <span>Appeal</span>
+                </div>
+                <ArrowRight size={14} className="text-muted-foreground" />
+              </Link>
+
+              <a 
+                href={getNavLink("#faq")} 
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between py-3 px-3 rounded-xl text-sm font-semibold text-foreground hover:bg-secondary transition"
+              >
+                <div className="flex items-center gap-3">
+                  <HelpCircle size={18} className="text-primary" />
+                  <span>FAQ</span>
+                </div>
+                <ArrowRight size={14} className="text-muted-foreground" />
+              </a>
+            </nav>
+          </div>
+
+          {/* Footer Area */}
+          <div className="flex flex-col gap-4 pt-4 border-t border-border">
+            {/* Theme Selector */}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold font-sans">Appearance</span>
+              <div className="flex items-center bg-secondary rounded-xl p-1 w-full border border-border">
                 <button
                   type="button"
                   onClick={() => setTheme("light")}
@@ -199,15 +276,17 @@ export function Navbar() {
                 </button>
               </div>
             </div>
+
+            {/* Primary Action Button */}
+            <a
+              href={getNavLink("#brands")}
+              onClick={() => setIsOpen(false)}
+              className="w-full text-center rounded-xl bg-primary text-black hover:bg-accent py-3 text-xs font-bold transition block shadow-md"
+            >
+              Sell Card Now
+            </a>
           </div>
-          <a
-            href={getNavLink("#brands")}
-            onClick={() => setIsOpen(false)}
-            className="w-full text-center rounded-full bg-primary text-black hover:bg-accent py-2.5 text-xs font-bold transition block"
-          >
-            Sell Card
-          </a>
-        </div>
+        </aside>
       </div>
     </header>
   )
