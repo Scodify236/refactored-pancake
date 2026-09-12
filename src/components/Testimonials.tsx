@@ -95,6 +95,8 @@ function ProofCard({ proof, onZoom }: { proof: Proof; onZoom: (urls: string[], i
                 <img
                   src={url}
                   alt={`Proof ${i + 1}`}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover/img:scale-105 transition duration-300"
                 />
               </button>

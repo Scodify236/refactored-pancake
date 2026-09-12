@@ -10,6 +10,9 @@ export function TiltCard({ intensity = 14, children, className, ...props }: Tilt
   const glowRef = React.useRef<HTMLDivElement>(null)
 
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Only execute tilt on precision pointers (mouse), disable on touch to preserve smooth scroll
+    if (window.matchMedia("(pointer: coarse)").matches) return
+
     const card = cardRef.current
     const glow = glowRef.current
     if (!card) return
@@ -44,7 +47,7 @@ export function TiltCard({ intensity = 14, children, className, ...props }: Tilt
   }
 
   return (
-    <div className="[perspective:1200px] h-full">
+    <div className="[perspective:1200px] h-full transform-gpu">
       <div
         ref={cardRef}
         onMouseMove={handleMove}
@@ -54,7 +57,7 @@ export function TiltCard({ intensity = 14, children, className, ...props }: Tilt
           transformStyle: "preserve-3d",
           transition: "transform 0.18s ease-out",
         }}
-        className={`relative h-full ${className || ""}`}
+        className={`relative h-full will-change-transform ${className || ""}`}
         {...props}
       >
         {children}

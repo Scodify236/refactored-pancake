@@ -147,13 +147,25 @@
 .liquid-glass {
   background: var(--card);
   border: 1px solid var(--border);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15);
 }
 
 :root.light .liquid-glass {
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.04);
+}
+
+/* Defer off-screen rendering for smooth 120fps scrolling on mobile */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 .grid-bg {

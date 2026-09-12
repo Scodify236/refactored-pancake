@@ -40,7 +40,7 @@ export function Hero() {
           background-size: 200% auto;
           -webkit-background-clip: text;
           background-clip: text;
-          filter: drop-shadow(0 4px 40px rgba(240,203,135,0.22)) drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+          text-shadow: 0 4px 30px rgba(240,203,135,0.25);
           animation: heroShimmer 10s linear infinite;
         }
         @keyframes heroShimmer {
@@ -48,41 +48,57 @@ export function Hero() {
           100% { background-position: 0% center; }
         }
 
-        /* Animated gradient orbs */
+        /* Animated gradient orbs with hardware accelerated transforms (no dynamic blur recalculation) */
         @keyframes orb1 {
-          0%, 100% { transform: translate(0, 0) scale(1); filter: blur(100px); }
-          33%       { transform: translate(70px, -50px) scale(1.15); filter: blur(120px); }
-          66%       { transform: translate(-60px, 40px) scale(0.9); filter: blur(110px); }
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          33%       { transform: translate3d(50px, -35px, 0) scale(1.08); }
+          66%       { transform: translate3d(-40px, 30px, 0) scale(0.95); }
         }
         @keyframes orb2 {
-          0%, 100% { transform: translate(0, 0) scale(1); filter: blur(90px); }
-          40%       { transform: translate(-80px, 60px) scale(1.2); filter: blur(110px); }
-          70%       { transform: translate(60px, -45px) scale(0.85); filter: blur(100px); }
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          40%       { transform: translate3d(-60px, 45px, 0) scale(1.1); }
+          70%       { transform: translate3d(45px, -35px, 0) scale(0.92); }
         }
         @keyframes orb3 {
-          0%, 100% { transform: translate(0, 0) scale(1); filter: blur(80px); }
-          50%       { transform: translate(45px, 70px) scale(1.1); filter: blur(100px); }
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          50%       { transform: translate3d(35px, 50px, 0) scale(1.06); }
         }
         @keyframes floatSparks {
-          0%, 100% { transform: translateY(0) translateX(0) scale(0.8); opacity: 0.2; }
-          50% { transform: translateY(-40px) translateX(20px) scale(1.2); opacity: 0.8; }
+          0%, 100% { transform: translate3d(0, 0, 0) scale(0.8); opacity: 0.2; }
+          50% { transform: translate3d(15px, -30px, 0) scale(1.2); opacity: 0.8; }
         }
         @keyframes rotateAura {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-        .hero-orb-1 { animation: orb1 20s ease-in-out infinite; }
-        .hero-orb-2 { animation: orb2 24s ease-in-out infinite; }
-        .hero-orb-3 { animation: orb3 18s ease-in-out infinite; }
-        .hero-spark { animation: floatSparks 8s ease-in-out infinite; }
+        .hero-orb-1 {
+          animation: orb1 22s ease-in-out infinite;
+          will-change: transform;
+          filter: blur(80px);
+        }
+        .hero-orb-2 {
+          animation: orb2 26s ease-in-out infinite;
+          will-change: transform;
+          filter: blur(70px);
+        }
+        .hero-orb-3 {
+          animation: orb3 20s ease-in-out infinite;
+          will-change: transform;
+          filter: blur(60px);
+        }
+        .hero-spark {
+          animation: floatSparks 8s ease-in-out infinite;
+          will-change: transform, opacity;
+        }
         .hero-aura-beam {
-          animation: rotateAura 60s linear infinite;
+          animation: rotateAura 75s linear infinite;
           transform-origin: center;
+          will-change: transform;
         }
       `}</style>
 
       {/* ── Background Layer ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden transform-gpu contain-strict">
         {/* Rotating ambient aura beams */}
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.06] dark:opacity-[0.04]">
           <div 
