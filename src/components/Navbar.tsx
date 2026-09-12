@@ -22,7 +22,7 @@ export function Navbar() {
     <header className="fixed top-0 inset-x-0 z-50">
       <div className="mx-auto mt-4 max-w-6xl px-4 flex flex-col gap-2">
         {/* Rebranding Announcement Banner */}
-        <div className="w-full bg-gradient-to-r from-amber-500/10 via-primary/20 to-amber-500/10 border border-primary/25 rounded-full px-5 py-2 text-center text-[10.5px] sm:text-xs font-sans font-medium text-foreground/90 shadow-md backdrop-blur-md flex items-center justify-center gap-2">
+        <div className="w-full liquid-glass border border-primary/25 rounded-full px-5 py-2 text-center text-[10.5px] sm:text-xs font-sans font-medium text-foreground/90 shadow-md flex items-center justify-center gap-2">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>

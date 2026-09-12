@@ -146,16 +146,17 @@
 /* Custom brand design classes */
 .liquid-glass,
 .glass {
-  background: var(--card);
+  background: rgba(15, 15, 18, 0.68);
   border: 1px solid var(--border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.18);
 }
 
 :root.light .liquid-glass,
 :root.light .glass {
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
 }
 
 /* Defer off-screen rendering for smooth 120fps scrolling on mobile */
