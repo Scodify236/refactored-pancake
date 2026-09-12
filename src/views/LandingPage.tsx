@@ -13,6 +13,8 @@ import Footer from "../components/Footer"
 export function LandingPage() {
   return (
     <div className="relative min-h-screen bg-background text-foreground font-sans antialiased selection:bg-primary/30 selection:text-white">
+
+      
       {/* Navigation Header */}
       <Navbar />
 
@@ -23,34 +25,22 @@ export function LandingPage() {
       <Marquee />
 
       {/* Brands Cards */}
-      <div className="content-auto">
-        <Brands />
-      </div>
+      <Brands />
 
       {/* How It Works Section */}
-      <div className="content-auto">
-        <HowItWorks />
-      </div>
+      <HowItWorks />
 
       {/* Payout Options */}
-      <div className="content-auto">
-        <Payouts />
-      </div>
+      <Payouts />
 
       {/* Testimonials Reviews Section */}
-      <div className="content-auto">
-        <Testimonials />
-      </div>
+      <Testimonials />
 
       {/* FAQ Accordion Section */}
-      <div className="content-auto">
-        <FAQ />
-      </div>
+      <FAQ />
 
       {/* CTA Section */}
-      <div className="content-auto">
-        <CTA />
-      </div>
+      <CTA />
 
       {/* Page Footer */}
       <Footer />
