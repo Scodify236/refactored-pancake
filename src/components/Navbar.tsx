@@ -179,7 +179,7 @@ export function Navbar() {
                 className="flex items-center justify-between py-3 px-3 rounded-xl text-sm font-semibold text-foreground hover:bg-secondary transition"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-primary font-bold text-sm">01</span>
+                  <HelpCircle size={18} className="text-primary" />
                   <span>How it works</span>
                 </div>
                 <ArrowRight size={14} className="text-muted-foreground" />
